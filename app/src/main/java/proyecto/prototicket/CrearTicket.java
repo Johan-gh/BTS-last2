@@ -117,6 +117,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
 
             }, anio, mes, dia);
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             datePickerDialog.show();
 
         } else if (view == txtHora) {
