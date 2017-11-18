@@ -230,7 +230,6 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                     cedula.put("sexo", cc_matcher.group(3));
                     cedula.put("fecha_nacimiento", cc_matcher.group(4));
                     cedula.put("GRH", cc_matcher.group(5));
-                    message = cedula.toString();
 
                     // Agregar a base de datos (ignorar por ahora, aqui se agregan cosas a la db y se actualiza la vista de los tiquetes de ser necesario)
                    // addData(cedula.get("cedula"), cedula.get("nombre"));
@@ -354,3 +353,5 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         toast.show();
     }
 }
+
+// TODO: Pasar texto escrito aqui a referencias en string.xml
