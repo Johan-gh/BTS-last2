@@ -95,8 +95,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
     }
 
     private SimpleDateFormat setDate() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return simpleDateFormat;
+        return new SimpleDateFormat("dd/MM/yyyy");
     }
 
     @Override
@@ -108,7 +107,6 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             dia = c.get(Calendar.DAY_OF_MONTH);
             mes = c.get(Calendar.MONTH);
             anio = c.get(Calendar.YEAR);
-
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
 
@@ -119,6 +117,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
             }
                     , dia, mes, anio);
+            datePickerDialog.updateDate(anio, mes, dia);
             datePickerDialog.show();
 
         } else if (view == txtHora) {
