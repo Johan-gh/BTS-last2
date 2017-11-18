@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Prototicket</string>
+    <string name="login">Iniciar sesión</string>
+
+    <string name="createTicket">Crear Tiquete</string>
+    <string name="dateBuy">Fecha Compra</string>
+    <string name="date">Fecha Viaje</string>
+    <string name="travelRoute">Ruta de Viaje</string>
+    <string name="posting">Destino</string>
+    <string name="vehicle">Vehiculo</string>
+    <string name="traveler">Pasajero</string>
+    <string name="cedula">Cédula</string>
+    <string name="RH">G.S.RH</string>
+    <string name="time">Hora Viaje</string>
+
+
+    <string name="checkTicket">Verificar Tiquete</string>
+    <string name="scanQR">Escanear Tiquete</string>
+
+    <string name="configuration">Ajustes</string>
+</resources>

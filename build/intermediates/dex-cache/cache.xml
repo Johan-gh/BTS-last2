@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/edison/git/prototicket/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.4.0_12e27bd28e73ba172a125bb8fe4ea3f4d57fb6db/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/edison/git/prototicket/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.4.0_82a38bd0332058c38daa328503b211e3bd639231/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/edison/git/prototicket/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.4.0_93f3f92d8aea0b301e48c6184973507ea030bc20/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/edison/.gradle/caches/modules-2/files-2.1/com.google.zxing/core/3.2.1/2287494d4f5f9f3a9a2bb6980e3f32053721b315/core-3.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="2287494d4f5f9f3a9a2bb6980e3f32053721b315">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/core-3.2.1_e04da1f3c91827fe2576d08a4a1c8abe1766a694/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/edison/git/prototicket/app/build/intermediates/exploded-aar/com.journeyapps/zxing-android-embedded/3.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="d4ce6303165f20650850673bd5891fbcca80caae">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.journeyapps-zxing-android-embedded-3.2.0_9adc7027c95c5d783db33e34a1b896999f377ac6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/edison/git/prototicket/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.4.0_6c0867ab194d3f9895b925602c530cb9eb4673e2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/edison/android/android-sdk-linux/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.4.0_0d9b5506d1573e04df5ecdfe8bf9a1065ab9eb06/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/edison/git/prototicket/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.4.0_a1824d88ed42580297dc49f797d3a122330d2cc3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/edison/git/prototicket/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="083e9dd79f33970650db8434664c672daeaa011b">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_78cedd4d4485a2e0ff7e79252e1b7352985e6ac8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/edison/git/prototicket/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.1"
+        sha1="d9361ede92661aa3ac97ac44bd6938de8c3b5485">
+        <dex dex="/home/edison/git/prototicket/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_1f66c464225aa718e4812959f3862ac263bd9588/classes.dex" />
+    </item>
+
+</items>
