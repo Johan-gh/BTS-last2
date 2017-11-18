@@ -115,9 +115,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                     txtFecha.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                 }
 
-            }
-                    , dia, mes, anio);
-            datePickerDialog.updateDate(anio, mes, dia);
+
+            }, anio, mes, dia);
             datePickerDialog.show();
 
         } else if (view == txtHora) {
