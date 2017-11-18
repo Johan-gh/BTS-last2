@@ -1,9 +1,11 @@
 package proyecto.prototicket;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -33,7 +35,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import proyecto.prototicket.Utils.BluetoothUtils;
 import proyecto.prototicket.models.Ticket;
@@ -196,215 +201,64 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Log.d("edison", "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                fastToast(getString(R.string.ERROR_LECTURA_CEDULA));
             } else {
-                Log.d("edison", result.getContents());
+                String reading = null;
+                String cleaned_reading = null;
 
-                ArrayList<String> cedulaData = new ArrayList<String>();
+                // Patron de extraccion de datos luego de limpiar la cedula
+                Pattern cleaned_cc = Pattern.compile("(?:(?:\\d+H?) \\|\\| (?:\\d+){1,2}) \\|\\| (\\d+) \\|\\| ((?:\\p{L}{2,}+(?: \\|\\| )?)+) \\|\\| (M|F) \\|\\| (\\d{8}) \\|\\| (?:\\d+) \\|\\| ((?:A|B|O|(?:AB))(?:\\+|-)).*");
+                HashMap<String,String> cedula = new HashMap<String, String>();
+                reading = result.getContents();
 
-                String _data = result.getContents();
-                String _temp = "";
-                for (int i = 0; i < _data.length(); i++) {
+                // limpieza de la cedula para soportar los formatos existentes
+                cleaned_reading = reading.replaceAll("(00(?=\\d+\\p{L}{2,}(\\s+|\0+)))|((\0+|\\s+)0(?=(M|F)\\d{8}))|\\s+|(\0+PubDSK_1\0+)|\0+|((?<=\\d)(?=\\p{L}{2,}))|((?<=M|F)(?=\\d{8}))|((?<=(M|F)\\d{8})(?=\\d+(O|A|B|(AB))(\\+|-)))|(?=(O|A|B|(AB))(\\+|-))", " || ");
 
-                    int charData = (int) _data.charAt(i);
+                // elimina huella digital que va despues del tipo de sangre
+                cleaned_reading = cleaned_reading.replaceAll("(?<=(O|A|B|(AB))(\\+|-)).*","");
+                Matcher cc_matcher = cleaned_cc.matcher(cleaned_reading);
+                String message = null;
+                String reading_status = null;
 
-                    if (charData == 0 || charData == 32) {
-                        if (!_temp.equals("")) {
-                            cedulaData.add(_temp);
-                            _temp = "";
-                        }
-                    } else {
-                        _temp += (char) _data.charAt(i);
-                    }
+                if(cc_matcher.find()){
+                    // Esto ocurre cuando la cedula se lee correctamente por el lector de PDF417 y ademas es posible extraer la informacion con las regex
+                    reading_status = "Scanned";
+                    cedula.put("cedula", cc_matcher.group(1));
 
-                    Log.d("edison", (int) _data.charAt(i) + ": " + _data.charAt(i));
-                }
+                    // Extrae el nombre del grupo 2 y cambia el separador arbitrario que asignamos por un espacio
+                    cedula.put("nombre", cc_matcher.group(2).replaceAll(" \\|\\| ", " "));
+                    cedula.put("sexo", cc_matcher.group(3));
+                    cedula.put("fecha_nacimiento", cc_matcher.group(4));
+                    cedula.put("GRH", cc_matcher.group(5));
+                    message = cedula.toString();
 
-                if (!_temp.equals("")) {
-                    cedulaData.add(_temp);
-                }
+                    // Agregar a base de datos (ignorar por ahora, aqui se agregan cosas a la db y se actualiza la vista de los tiquetes de ser necesario)
+                   // addData(cedula.get("cedula"), cedula.get("nombre"));
+                   // updateList();
 
-                cedulaData.size();
+                    // Aqui ponemos la info en el formulario
 
-                ArrayList<Character> letras = new ArrayList<Character>();
-                ArrayList<Character> numeros = new ArrayList<Character>();
 
-                String primerApellido = "";
-                String cedula = "";
-                String segundoApellido = "";
-                String primerNombre = "";
-                String segundoNombre = "";
-                String rH = "";
-
-                int contador = 0;
-                Boolean entro = true;
-                for (Iterator<String> i = cedulaData.iterator(); i.hasNext(); ) {
-                    String item = i.next();
-                    if (entro == false) {
-                        switch (contador) {
-                            case 3:
-                                for (char c : item.toCharArray()) {
-                                    if (Character.isDigit(c)) {
-                                        numeros.add(c);
-                                    } else if (Character.isLetter(c)) {
-                                        letras.add(c);
-                                    }
-                                }
-
-                                for (Character le : letras) {
-                                    primerApellido = primerApellido + Character.toString(le);
-                                }
-                                String cedulaInvertida = "";
-                                for (int dis = numeros.size(); dis > (numeros.size() - 10); dis--) {
-                                    cedulaInvertida = cedulaInvertida + Character.toString(numeros.get(dis - 1));
-                                    //cedula = cedula + Character.toString(numeros.get(dis));
-                                }
-                                StringBuilder builder = new StringBuilder(cedulaInvertida);
-                                cedula = builder.reverse().toString();
-                                break;
-
-                            case 4:
-                                segundoApellido = cedulaData.get(4);
-                                break;
-                            case 5:
-                                primerNombre = cedulaData.get(5);
-                                break;
-
-                            case 6:
-                                for (char c : item.toCharArray()) {
-                                    if (Character.isDigit(c)) {
-                                        segundoNombre = "";
-                                        break;
-                                    } else {
-                                        segundoNombre = cedulaData.get(6);
-                                    }
-                                }
-                                break;
-
-                            case 7:
-                                String grupoSanguineo = "";
-                                String invertido = "";
-                                if (segundoNombre.equals("")) {
-                                    StringBuilder builder1 = new StringBuilder(cedulaData.get(6));
-                                    grupoSanguineo = builder1.reverse().toString();
-
-                                } else {
-                                    StringBuilder builder1 = new StringBuilder(cedulaData.get(7));
-                                    grupoSanguineo = builder1.reverse().toString();
-                                }
-
-                                for (char c : grupoSanguineo.toCharArray()) {
-                                    if (Character.isLetter(c)) {
-                                        invertido += Character.toString(c);
-                                    } else if (Character.isDigit(c)) {
-                                        StringBuilder builder2 = new StringBuilder(invertido);
-                                        rH = builder2.reverse().toString();
-                                        break;
-                                    } else {
-                                        invertido += Character.toString(c);
-                                    }
-                                }
-                        }
-                    } else {
-                        switch (contador) {
-                            case 2:
-                                for (char c : item.toCharArray()) {
-                                    if (Character.isDigit(c)) {
-                                        numeros.add(c);
-                                    } else if (Character.isLetter(c)) {
-                                        letras.add(c);
-                                    }
-                                }
-
-                                for (Character le : letras) {
-                                    primerApellido = primerApellido + Character.toString(le);
-                                }
-                                if (primerApellido.equals("")) {
-                                    entro = false;
-                                    numeros.clear();
-                                    letras.clear();
-                                    break;
-                                }
-                                String cedulaInvertida = "";
-                                for (int dis = numeros.size(); dis > (numeros.size() - 10); dis--) {
-                                    cedulaInvertida = cedulaInvertida + Character.toString(numeros.get(dis - 1));
-                                    //cedula = cedula + Character.toString(numeros.get(dis));
-                                }
-                                StringBuilder builder = new StringBuilder(cedulaInvertida);
-                                cedula = builder.reverse().toString();
-                                break;
-
-                            case 3:
-                                segundoApellido = cedulaData.get(3);
-                                break;
-
-                            case 4:
-                                primerNombre = cedulaData.get(4);
-                                break;
-
-                            case 5:
-
-                                for (char c : item.toCharArray()) {
-                                    if (Character.isDigit(c)) {
-                                        segundoNombre = "";
-                                        break;
-                                    } else {
-                                        segundoNombre = cedulaData.get(5);
-                                    }
-                                }
-                                break;
-                            case 6:
-                                String grupoSanguineo = "";
-                                String invertido = "";
-                                if (segundoNombre.equals("")) {
-                                    StringBuilder builder1 = new StringBuilder(cedulaData.get(5));
-                                    grupoSanguineo = builder1.reverse().toString();
-
-                                } else {
-                                    StringBuilder builder1 = new StringBuilder(cedulaData.get(6));
-                                    grupoSanguineo = builder1.reverse().toString();
-                                }
-
-                                for (char c : grupoSanguineo.toCharArray()) {
-                                    if (Character.isLetter(c)) {
-                                        invertido += Character.toString(c);
-                                    } else if (Character.isDigit(c)) {
-                                        StringBuilder builder2 = new StringBuilder(invertido);
-                                        rH = builder2.reverse().toString();
-                                        break;
-                                    } else {
-                                        invertido += Character.toString(c);
-                                    }
-                                }
-
-                        }
-                    }
-
-                    contador++;
-
-                /*
-
-                    posicion 6: caracter 1 se ignora + Sexo (M,F) + fecha nacimiento AAAAMMDD + 6 caracteres ignoran + tipo sangre
-
-                    *
+                    txtPasajero.setText(cedula.get("nombre"));
+                    txtCedula.setText(cedula.get("cedula"));
+                    /*
+                    * TODO: Quitar el RH de toda la interfaz, debe gusrdarse en la base de datos pero no verse en la APP ni imprimir en el tiquete
+                    * TODO: Tambien hay que guardar sexo y fecha de nacimiento pero no mostrarlos ni en la GUI ni en el tiquete
                     * */
+                    txtRH.setText(cedula.get("GRH"));
 
+                    fastToast(getString(R.string.INFO__TIQUETE_CREADO_EXITOSAMENTE));
+                }else{
+                    // Esto ocurre cuando la cedula se lee correctamente por el lector de PDF417 y no es posible extraer la informacion con las regex
+                    // significa o que no se esta leyendo una cedula o que la informacion esta malformada
+                    fastToast(getString(R.string.ERROR_FORMATO_CC_MAL_FORMADO));
                 }
 
-                if (segundoNombre.equals("")) {
-                    txtPasajero.setText(primerNombre + " " + primerApellido + " " + segundoApellido);
-
-                } else {
-                    txtPasajero.setText(primerNombre + " " + segundoNombre + " " + primerApellido + " " + segundoApellido);
-                }
-                txtCedula.setText(cedula);
-                txtRH.setText(rH);
-
-
-                //Intent intent = new Intent(this, MostrarQR.class);
-                //intent.putExtra("CodigoQR", result.getContents());
-                //startActivity(intent);
+                // Se muestra un dialog (solo para debugging, la idea es usar un toast para informar la lectura exitosa
+                // La info esta en el hashmap HashMap<String, String> cedula con los campos cedula, nombre, sexo, fecha_nacimiento, GRH.
+                // El nombre no hay que ordenarlo (por lo menos en esta etapa), nombres como de la santa cruz (no se si exista) imponen un constrain muy complicado
+                // y la unica forma que se me ocurre de hacerlo es usando un algoritmo de NLP (se sale del alcance del proyecto y no aporta valor)
+                // La opcion mas simple que veo que conserva generalidad es tener una tabla con nombres y apellidos comunes que ayude a decidir como reorganizar el nombre...
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
@@ -493,5 +347,10 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         }catch(Exception e){
 
         }
+    }
+
+    private void fastToast(String message){
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 }
