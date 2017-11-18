@@ -18,6 +18,8 @@ public class Configuracion extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
