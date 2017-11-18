@@ -211,6 +211,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                 HashMap<String,String> cedula = new HashMap<String, String>();
                 reading = result.getContents();
 
+
                 
                 // limpieza de la cedula para soportar los formatos existentes
                 cleaned_reading = reading.replaceAll("(00(?=\\d+\\p{L}{2,}(\\s+|\0+)))|((\0+|\\s+)0(?=(M|F)\\d{8}))|\\s+|(\0+PubDSK_1\0+)|\0+|((?<=\\d)(?=\\p{L}{2,}))|((?<=M|F)(?=\\d{8}))|((?<=(M|F)\\d{8})(?=\\d+(O|A|B|(AB))(\\+|-)))|(?=(O|A|B|(AB))(\\+|-))", " || ");
