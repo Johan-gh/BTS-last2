@@ -207,17 +207,15 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                 String cleaned_reading = null;
 
                 // Patron de extraccion de datos luego de limpiar la cedula
-                Pattern cleaned_cc = Pattern.compile(getString(R.string.REGEX_EXTRAER_DATOS_CEDULA));
+                Pattern cleaned_cc = Pattern.compile("(?:(?:\\d+H?) \\|\\| (?:\\d+){1,2}) \\|\\| (\\d+) \\|\\| ((?:\\p{L}{2,}+(?: \\|\\| )?)+) \\|\\| (M|F) \\|\\| (\\d{8}) \\|\\| (?:\\d+) \\|\\| ((?:A|B|O|(?:AB))(?:\\+|-)).*");
                 HashMap<String,String> cedula = new HashMap<String, String>();
                 reading = result.getContents();
 
-
-                
                 // limpieza de la cedula para soportar los formatos existentes
-                cleaned_reading = reading.replaceAll(getString(R.string.REGEX_LIMPIAR_CEDULA1), getString(R.string.CC_SEP));
+                cleaned_reading = reading.replaceAll("(00(?=\\d+\\p{L}{2,}(\\s+|\0+)))|((\0+|\\s+)0(?=(M|F)\\d{8}))|\\s+|(\0+PubDSK_1\0+)|\0+|((?<=\\d)(?=\\p{L}{2,}))|((?<=M|F)(?=\\d{8}))|((?<=(M|F)\\d{8})(?=\\d+(O|A|B|(AB))(\\+|-)))|(?=(O|A|B|(AB))(\\+|-))", " || ");
 
                 // elimina huella digital que va despues del tipo de sangre
-                cleaned_reading = cleaned_reading.replaceAll(getString(R.string.REGEX_QUITAR_HUELLA),"");
+                cleaned_reading = cleaned_reading.replaceAll("(?<=(O|A|B|(AB))(\\+|-)).*","");
                 Matcher cc_matcher = cleaned_cc.matcher(cleaned_reading);
                 String message = null;
                 String reading_status = null;
@@ -228,7 +226,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                     cedula.put("cedula", cc_matcher.group(1));
 
                     // Extrae el nombre del grupo 2 y cambia el separador arbitrario que asignamos por un espacio
-                    cedula.put("nombre", cc_matcher.group(2).replaceAll(getString(R.string.REGEX_CC_SEP), " "));
+                    cedula.put("nombre", cc_matcher.group(2).replaceAll(" \\|\\| ", " "));
                     cedula.put("sexo", cc_matcher.group(3));
                     cedula.put("fecha_nacimiento", cc_matcher.group(4));
                     cedula.put("GRH", cc_matcher.group(5));
