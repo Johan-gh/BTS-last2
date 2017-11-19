@@ -2,7 +2,6 @@ package proyecto.prototicket.models;
 
 import java.util.ArrayList;
 
-
 public class Ticket {
 
     private String buyDate;

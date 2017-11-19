@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,11 +38,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import proyecto.prototicket.Utils.BluetoothUtils;
 import proyecto.prototicket.models.Ticket;
+import proyecto.prototicket.schemas.TicketAppDatabase;
+import proyecto.prototicket.schemas.TicketAppDatabase_Impl;
+import proyecto.prototicket.schemas.TicketDBHelper;
+import proyecto.prototicket.schemas.Version.Version;
 
 public class CrearTicket extends AppCompatActivity implements View.OnClickListener {
 
@@ -83,6 +91,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         btnSave = (Button) findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                // TODO Quitar eso, es una prueba para llamar de forma asincronica a la DB
+                TicketDBHelper.populateAsync(TicketAppDatabase.getTicketDatabase(getApplicationContext()));
                 try {
                     saveData();
                 } catch (Exception ex) {
