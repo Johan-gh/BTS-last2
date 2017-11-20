@@ -46,10 +46,6 @@ import java.util.stream.Collectors;
 
 import proyecto.prototicket.Utils.BluetoothUtils;
 import proyecto.prototicket.models.Ticket;
-import proyecto.prototicket.schemas.TicketAppDatabase;
-import proyecto.prototicket.schemas.TicketAppDatabase_Impl;
-import proyecto.prototicket.schemas.TicketDBHelper;
-import proyecto.prototicket.schemas.Version.Version;
 
 public class CrearTicket extends AppCompatActivity implements View.OnClickListener {
 
@@ -91,8 +87,6 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         btnSave = (Button) findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // TODO Quitar eso, es una prueba para llamar de forma asincronica a la DB
-                TicketDBHelper.populateAsync(TicketAppDatabase.getTicketDatabase(getApplicationContext()));
                 try {
                     saveData();
                 } catch (Exception ex) {
