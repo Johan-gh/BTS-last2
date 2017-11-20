@@ -5,10 +5,14 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 
 import android.app.TimePickerDialog;
+import android.arch.lifecycle.LifecycleActivity;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.persistence.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -20,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,6 +45,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
@@ -46,10 +54,13 @@ import java.util.stream.Collectors;
 
 import proyecto.prototicket.Utils.BluetoothUtils;
 import proyecto.prototicket.models.Ticket;
+import proyecto.prototicket.schemas.Bus.Bus;
+import proyecto.prototicket.schemas.TicketDatabase;
 
-public class CrearTicket extends AppCompatActivity implements View.OnClickListener {
+public class CrearTicket extends LifecycleActivity implements View.OnClickListener {
 
-    private EditText txtFecha, txtHora, txtDateBuy, txtCedula, txtPasajero, txtRH, txtTravelRoute, txtPosting, txtVehicle;
+    private EditText txtFecha, txtHora, txtDateBuy, txtCedula, txtPasajero, txtRH, txtTravelRoute, txtPosting;
+    AutoCompleteTextView txtVehicle;
 
     private ImageButton btnCodigoCedula;
     private Button btnSave;
@@ -61,7 +72,39 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
+
+        TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
+        // TODO: Quitar esto
+        // Agreagar buses para prueba rapida del autocompletar
+        final Executor exec;
+        exec = Executors.newSingleThreadExecutor();
+        exec.execute(() -> {
+            db.busDao().crearBus(new Bus("ABC123", "Prueba", 1));
+            db.busDao().crearBus(new Bus("DBC123", "Prueba", 1));
+            db.busDao().crearBus(new Bus("DBC124", "Prueba", 1));
+            db.busDao().crearBus(new Bus("KBC123", "Prueba", 1));
+            db.busDao().crearBus(new Bus("LBC123", "Prueba", 1));
+            db.busDao().crearBus(new Bus("ABC129", "Prueba", 1));
+            db.busDao().crearBus(new Bus("DBCN129", "Prueba", 1));
+            db.busDao().crearBus(new Bus("DBC129", "Prueba", 1));
+            db.busDao().crearBus(new Bus("KBC129", "Prueba", 1));
+            db.busDao().crearBus(new Bus("LBC129", "Prueba", 1));
+            db.busDao().crearBus(new Bus("ABO127", "Prueba", 1));
+            db.busDao().crearBus(new Bus("DBC127", "Prueba", 1));
+            db.busDao().crearBus(new Bus("DBC127", "Prueba", 1));
+            db.busDao().crearBus(new Bus("KBC127", "Prueba", 1));
+            db.busDao().crearBus(new Bus("LBC127", "Prueba", 1));
+            db.busDao().crearBus(new Bus("ABC155", "Prueba", 1));
+            db.busDao().crearBus(new Bus("DBH155", "Prueba", 1));
+            db.busDao().crearBus(new Bus("DBC155", "Prueba", 1));
+            db.busDao().crearBus(new Bus("KBC155", "Prueba", 1));
+            db.busDao().crearBus(new Bus("LBC155", "Prueba", 1));
+        });
+
+
         setContentView(R.layout.activity_crear_ticket);
 
         txtDateBuy = (EditText) findViewById(R.id.txtDateBuy);
@@ -72,9 +115,24 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         txtCedula = (EditText) findViewById(R.id.txtCedula);
         txtRH = (EditText) findViewById(R.id.txtRH);
         txtPosting = (EditText) findViewById(R.id.txtPosting);
-        txtVehicle = (EditText) findViewById(R.id.txtVehicle);
+        txtVehicle = (AutoCompleteTextView) findViewById(R.id.txtVehicle);
 
+        db.busDao().verPlacas().observe(this, strinList -> {
+            // TODO Considerar lo siguiente y ojala modificar para eliminar
+            /*
+            Esto se puede dejar asi y no hay problema, sin embargo, hay un tema de arquitectura, en
+            vez de usar esto directamente debemos considerar crear un repositorio para la informacion y todo eso
+            ver https://developer.android.com/topic/libraries/architecture/guide.html
 
+            Lo hice asi de forma rapida y el patron puede reproducirse para otras cosas, sin embargo a
+            mediano plazo consideraremos el repossitorio con inyeccion de dependencia sy dagger...
+             */
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1,strinList);
+            txtVehicle.setAdapter(adapter);
+            txtVehicle.setThreshold(1);
+
+        });
         btnCodigoCedula = (ImageButton) findViewById(R.id.btnCodigoCedula);
 
         txtDateBuy.setText(setDate().format(Calendar.getInstance().getTime()));

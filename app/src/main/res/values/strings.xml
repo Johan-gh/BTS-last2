@@ -17,5 +17,6 @@
     <string name="ERROR_FORMATO_CC_MAL_FORMADO">Formato de codigo de cédula mal formado</string>
     <string name="INFO__TIQUETE_CREADO_EXITOSAMENTE">Tiquete creado correctamente</string>
     <string name="ERROR_LECTURA_CEDULA">Error en la lectura del código de la cédula</string>
+    <string name="DB_NAME">main_db</string>
     <!-- In this collection, we will keep each title "as is" -->
 </resources>

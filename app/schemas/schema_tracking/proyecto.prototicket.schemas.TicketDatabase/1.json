@@ -1,0 +1,42 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "815357d8dae21aa4d56d2ac3bee9df35",
+    "entities": [
+      {
+        "tableName": "tabla_bus",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`placa` TEXT, `tipo_de_servicio` TEXT, `capacidad` INTEGER, PRIMARY KEY(`placa`))",
+        "fields": [
+          {
+            "fieldPath": "placa",
+            "columnName": "placa",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "tipo_de_servicio",
+            "columnName": "tipo_de_servicio",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "capacidad",
+            "columnName": "capacidad",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "placa"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"815357d8dae21aa4d56d2ac3bee9df35\")"
+    ]
+  }
+}

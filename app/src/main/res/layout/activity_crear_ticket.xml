@@ -123,12 +123,12 @@
             android:layout_height="wrap_content"
             android:text="@string/vehicle"/>
 
-        <EditText
+        <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text=""
-            android:id="@+id/txtVehicle"/>
+            android:hint="Inserte la placa"
+            android:id="@+id/txtVehicle"></AutoCompleteTextView>
 
     </LinearLayout>
 
