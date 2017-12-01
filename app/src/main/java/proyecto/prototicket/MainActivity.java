@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    @Override
+    /*@Override
     protected void onDestroy() {
         try {
             bT.closeBT();
@@ -80,5 +80,5 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         super.onDestroy();
-    }
+    }*/
 }

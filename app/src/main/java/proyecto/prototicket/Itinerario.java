@@ -16,6 +16,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import proyecto.prototicket.schemas.Bus.Bus;
+import proyecto.prototicket.schemas.Empresa.Empresa;
 import proyecto.prototicket.schemas.TicketDatabase;
 
 public class Itinerario extends AppCompatActivity implements LifecycleRegistryOwner {
@@ -63,8 +65,6 @@ public class Itinerario extends AppCompatActivity implements LifecycleRegistryOw
 
     private void cargarItinerario(TicketDatabase db) {
 
-
-
         List<String> rutaOrigen = new ArrayList<String>();
         String split[] = variables.split("-");
         String empresaId = split[0];
@@ -80,7 +80,25 @@ public class Itinerario extends AppCompatActivity implements LifecycleRegistryOw
                     String fechaSalida = item.getFecha_salida().toString();
                     String horaSalida = item.getHora_salida().toString();
                     String numero_bus = item.getNumero_bus().toString();
-                    rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + empresaId + "  " + numero_bus);
+                    String empresa_id = item.getEmpresa().toString();
+
+                    db.empresaDao().verEmpresaPorId(empresa_id).observe(Itinerario.this,(List<Empresa> empresaList)->{
+                        for(Empresa item1 : empresaList){
+
+                            String nombredb = item1.getNombre().toString();
+
+                            db.busDao().verPlacaPorNumero(numero_bus).observe(Itinerario.this, (List<Bus> busList)->{
+                               for(Bus item2:busList){
+
+                                   String placadb = item2.getPlaca();
+                                   rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + nombredb + "  " + placadb);
+                               }
+
+
+                            });
+
+                        }
+                    });
 
                 }
             });
@@ -93,7 +111,21 @@ public class Itinerario extends AppCompatActivity implements LifecycleRegistryOw
                     String fechaSalida = item.getFecha_salida().toString();
                     String horaSalida = item.getHora_salida().toString();
                     String numero_bus = item.getNumero_bus().toString();
-                    rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + empresaId + "  " + numero_bus);
+                    db.empresaDao().verEmpresaPorId(empresaId).observe(Itinerario.this,(List<Empresa> empresaList)->{
+                        for(Empresa item1 : empresaList){
+                            String nombredb = item1.getNombre().toString();
+
+                            db.busDao().verPlacaPorNumero(numero_bus).observe(Itinerario.this, (List<Bus> busList)-> {
+                                for (Bus item2 : busList) {
+
+                                    String placadb = item2.getPlaca();
+                                    rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + nombredb + "  " + placadb);
+                                }
+                            });
+                        }
+
+                    });
+
 
                 }
             });

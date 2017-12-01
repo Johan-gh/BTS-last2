@@ -17,10 +17,21 @@ public class Bus {
 
     private String tipo_servicio;
 
-    public Bus(String placa, String capacidad, String tipo_servicio) {
+    private String numero_bus;
+
+    public Bus(String placa, String capacidad, String tipo_servicio, String numero_bus) {
         this.placa = placa;
         this.capacidad = capacidad;
         this.tipo_servicio = tipo_servicio;
+        this.numero_bus = numero_bus;
+    }
+
+    public String getNumero_bus() {
+        return numero_bus;
+    }
+
+    public void setNumero_bus(String numero_bus) {
+        this.numero_bus = numero_bus;
     }
 
     public String getPlaca() {

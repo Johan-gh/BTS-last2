@@ -22,4 +22,7 @@ public interface BusDao {
 
     @Query("SELECT placa FROM tabla_bus WHERE placa = :placa")
     public List<Bus> verificarPlaca(String placa);
+
+    @Query("SELECT placa FROM tabla_bus WHERE numero_bus = :numeroBus")
+    public LiveData<List<Bus>> verPlacaPorNumero(String numeroBus);
 }
