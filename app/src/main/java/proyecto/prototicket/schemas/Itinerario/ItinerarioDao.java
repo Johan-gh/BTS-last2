@@ -19,10 +19,12 @@ public interface ItinerarioDao {
     public void crearItinerario(Itinerario itinerario);
 
 
-    @Query("SELECT id, origen, empresa, destino FROM tabla_itinerario")
+    @Query("SELECT id, origen, empresa, destino,numero_bus FROM tabla_itinerario")
     public LiveData<List<Itinerario>> verItinerarioOrigen();
 
-    @Query("SELECT id, empresa, fecha_salida,hora_salida, origen, destino FROM tabla_itinerario WHERE empresa=:empresa AND origen=:origen AND destino=:destino")
-    public LiveData<List<Itinerario>> verItinerario(String empresa, String origen, String destino);
+    @Query("SELECT id, empresa, fecha_salida,hora_salida, origen, destino, numero_bus FROM tabla_itinerario WHERE origen=:origen AND destino=:destino")
+    public LiveData<List<Itinerario>> verItinerario(String origen, String destino);
 
+    @Query("SELECT id, empresa, fecha_salida,hora_salida, origen, destino, numero_bus FROM tabla_itinerario WHERE empresa=:empresa AND origen=:origen AND destino=:destino")
+    public LiveData<List<Itinerario>> verItinerarioEmpresa(String empresa, String origen, String destino);
 }

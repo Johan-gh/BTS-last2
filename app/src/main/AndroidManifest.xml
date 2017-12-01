@@ -49,7 +49,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Pre_Itinerario" />
-        <activity android:name=".Itinerario"></activity>
+        <activity android:name=".Itinerario" />
+        <!--<activity android:name=".ver_itinerario"></activity>-->
     </application>
 
 </manifest>

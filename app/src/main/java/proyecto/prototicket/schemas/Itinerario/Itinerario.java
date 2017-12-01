@@ -16,15 +16,21 @@ public class Itinerario {
     private String hora_salida;
     private String origen;
     private String destino;
+    private String numero_bus;
 
-    public Itinerario(String id, String empresa, String fecha_salida, String hora_salida, String origen, String destino) {
+    public Itinerario(String id, String empresa, String fecha_salida, String hora_salida, String origen, String destino, String numero_bus) {
         this.id = id;
         this.empresa = empresa;
         this.fecha_salida = fecha_salida;
         this.hora_salida = hora_salida;
         this.origen = origen;
         this.destino = destino;
+        this.numero_bus = numero_bus;
     }
+
+    public String getNumero_bus() {return numero_bus;}
+
+    public void setNumero_bus(String numero_bus) {this.numero_bus = numero_bus;}
 
     public String getId() {
         return id;

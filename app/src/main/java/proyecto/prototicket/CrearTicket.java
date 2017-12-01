@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -93,6 +94,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_ticket);
 
+
         txtOrigenDestino = (AutoCompleteTextView) findViewById(R.id.txtTravelRoute);
         txtFecha = (EditText) findViewById(R.id.txtDate);
         txtHora = (EditText) findViewById(R.id.txtTime);
@@ -147,12 +149,34 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        try {
-            bT = new BluetoothUtils(CrearTicket.this);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        Intent intent = getIntent();
+
+        String from_act = intent.getStringExtra("from_act");
+        if(from_act == null){
+            return;
         }
 
+        if(from_act.equals("Itinerario")){
+            // inicializar con extras
+            String datosIti = intent.getStringExtra("datosItinerario");
+            String[] datos = datosIti.split("  ");
+            String[] ruta = datos[0].split("-");
+            String origen = ruta[0].toString();
+            String destino = ruta[1].toString();
+            String fecha_viaje = datos[1].toString();
+            String hora_viaje = datos[2].toString();
+            String empresa = datos[3].toString();
+            String numero_bus = datos[4].toString();
+            txtOrigenDestino.setText(origen + "-" + destino);
+            txtFecha.setText(fecha_viaje);
+            txtHora.setText(hora_viaje);
+
+            Log.d("De donde viene", "Itinerario");
+        }else {
+            // no se
+            Log.d("De donde viene", "Npi");
+        }
 
     }
 
@@ -577,6 +601,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             }
     }
 
+
+
     @Override
     protected void onPause() {
 
@@ -596,6 +622,26 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
         }
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        try{
+            bT.closeBT();
+        }catch(Exception e){
+
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        try {
+            bT = new BluetoothUtils(CrearTicket.this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onResume();
     }
 
     private void fastToast(String message){

@@ -64,7 +64,7 @@ public class ItinerarioRepository {
                 exec = Executors.newSingleThreadExecutor();
                 exec.execute(() -> {
 
-                    db.ItinerarioDao().crearItinerario(new Itinerario(jsonObject.optString("id"), jsonObject.optString("empresa"), jsonObject.optString("fecha_salida"), jsonObject.optString("hora_salida"), jsonObject.optString("origen"), jsonObject.optString("destino")));
+                    db.ItinerarioDao().crearItinerario(new Itinerario(jsonObject.optString("id"), jsonObject.optString("empresa"), jsonObject.optString("fecha_salida"), jsonObject.optString("hora_salida"), jsonObject.optString("origen"), jsonObject.optString("destino"), jsonObject.optString("numero_bus")));
                 });
             }
         }catch (MalformedURLException e){

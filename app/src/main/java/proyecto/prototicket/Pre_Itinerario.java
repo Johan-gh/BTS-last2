@@ -79,7 +79,7 @@ public class Pre_Itinerario extends AppCompatActivity implements LifecycleRegist
         btnSiguiente.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                if(txtEmpresa.getText().toString().equals("")||
+                if(
                         txtOrigen.getText().toString().equals("")||
                         txtDestino.getText().toString().equals("")){
 
