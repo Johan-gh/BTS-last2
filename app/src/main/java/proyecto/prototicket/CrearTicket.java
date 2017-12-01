@@ -71,6 +71,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
     AutoCompleteTextView txtOrigenDestino;
     List<TicketDb> tdbList ;
 
+    private String variables;
+
     private Dictionary<String, String> rutaId = new Hashtable<>();
     private Dictionary<String, String> puntoVentaId = new Hashtable<>();
 
@@ -113,6 +115,25 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         autoCompletarRuta( db,this.txtOrigenDestino);
 
         btnCodigoCedula = (ImageButton) findViewById(R.id.btnCodigoCedula);
+
+        //tomo los datos del intent
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            variables = bundle.getString("variableCargar");
+            String[] split = variables.split("~");
+            String origenDestino = split[0];
+            String fechaSalida = split[1];
+            String horaSalida = split[2];
+            String placa = split[4];
+            txtOrigenDestino.setText(origenDestino);
+            txtFecha.setText(fechaSalida);
+            txtHora.setText(horaSalida);
+            txtVehicle.setText(placa);
+
+        } else {
+            Toast.makeText(CrearTicket.this, "vacio", Toast.LENGTH_LONG).show();
+        }
 
 
         btnCodigoCedula.setOnClickListener(this);

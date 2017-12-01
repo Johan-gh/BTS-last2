@@ -26,6 +26,8 @@ public class Itinerario extends AppCompatActivity implements LifecycleRegistryOw
     private String variables;
     private ListView listView;
 
+    private String variableCrearT;
+
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
 
     @Override
@@ -36,6 +38,12 @@ public class Itinerario extends AppCompatActivity implements LifecycleRegistryOw
         //tomo los datos del intent
 
         Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            variables = bundle.getString("itinerario");
+        } else {
+            Toast.makeText(Itinerario.this, "vacio", Toast.LENGTH_LONG).show();
+        }
+
         listView = (ListView)findViewById(R.id.lvItinerario);
         listView.setClickable(true);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -44,19 +52,13 @@ public class Itinerario extends AppCompatActivity implements LifecycleRegistryOw
                 String  itemValue    = (String)listView.getItemAtPosition(position);
 
 
-
-                Intent intent = new Intent(getApplicationContext(), CrearTicket.class);
-
-                intent.putExtra("datosItinerario",itemValue);
-                intent.putExtra("from_act", "Itinerario");
+                Intent intent = new Intent(Itinerario.this, CrearTicket.class);
+                intent.putExtra("variableCargar",variableCrearT);
                 startActivity(intent);
             }
         });
-        if (bundle != null) {
-            variables = bundle.getString("itinerario");
-        } else {
-            Toast.makeText(Itinerario.this, "vacio", Toast.LENGTH_LONG).show();
-        }
+
+
 
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
 
@@ -91,6 +93,7 @@ public class Itinerario extends AppCompatActivity implements LifecycleRegistryOw
                                for(Bus item2:busList){
 
                                    String placadb = item2.getPlaca();
+                                   variableCrearT = origendb + "-" + destinodb + "~" + fechaSalida + "~" + horaSalida + "~" + nombredb + "~" + placadb;
                                    rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + nombredb + "  " + placadb);
                                }
 
@@ -119,6 +122,7 @@ public class Itinerario extends AppCompatActivity implements LifecycleRegistryOw
                                 for (Bus item2 : busList) {
 
                                     String placadb = item2.getPlaca();
+                                    variableCrearT = origendb + "-" + destinodb + "~" + fechaSalida + "~" + horaSalida + "~" + nombredb + "~" + placadb;
                                     rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + nombredb + "  " + placadb);
                                 }
                             });
