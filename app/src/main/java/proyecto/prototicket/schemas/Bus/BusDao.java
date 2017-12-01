@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.database.Cursor;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface BusDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void crearBus(Bus bus);
+
+    @Query("SELECT placa FROM tabla_bus WHERE placa = :placa")
+    public List<Bus> verificarPlaca(String placa);
 }

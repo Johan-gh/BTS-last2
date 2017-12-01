@@ -4,10 +4,8 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
-
-
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CrearTicket">
+        <activity android:name=".Configuracion">
             <intent-filter>
                 <action android:name="android.intent.action.CREARTICKET" />
 
@@ -36,7 +34,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Configuracion">
+        <activity android:name=".CrearTicket">
             <intent-filter>
                 <action android:name="android.intent.action.CONFIGURACION" />
 
@@ -50,6 +48,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".Pre_Itinerario" />
+        <activity android:name=".Itinerario"></activity>
     </application>
 
 </manifest>

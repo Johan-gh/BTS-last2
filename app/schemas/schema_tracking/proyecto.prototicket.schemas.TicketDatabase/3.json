@@ -1,0 +1,71 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "0d76103aa41bd890717a0493f0cfe1df",
+    "entities": [
+      {
+        "tableName": "tabla_bus",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`placa` TEXT, `tipo_de_servicio` TEXT, `capacidad` INTEGER, PRIMARY KEY(`placa`))",
+        "fields": [
+          {
+            "fieldPath": "placa",
+            "columnName": "placa",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "tipo_de_servicio",
+            "columnName": "tipo_de_servicio",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "capacidad",
+            "columnName": "capacidad",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "placa"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "tabla_punto_venta",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `nombre` TEXT, `ciudad` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "nombre",
+            "columnName": "nombre",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "ciudad",
+            "columnName": "ciudad",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0d76103aa41bd890717a0493f0cfe1df\")"
+    ]
+  }
+}

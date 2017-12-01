@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Ticket {
 
+
     private String buyDate;
     private String travelDate;
     private String travelRoute;
@@ -13,6 +14,16 @@ public class Ticket {
     private String schedule;
     private String rh;
     private String travelHour;
+
+    public String getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(String precio) {
+        this.precio = precio;
+    }
+
+    private String precio;
 
     public String getBuyDate() {
         return buyDate;
@@ -89,17 +100,9 @@ public class Ticket {
 
     public ArrayList<String> getDataPrint(){
         ArrayList<String> dataPrint = new ArrayList<String>();
-        dataPrint.add("Fecha Compra: " + this.getBuyDate());
-        dataPrint.add("Fecha viaje: " + this.getTravelDate());
-        dataPrint.add("Hora viaje: " + this.getTravelHour());
-        dataPrint.add("Ruta Viaje: " + this.getTravelRoute());
-        dataPrint.add("Destino: " + this.getDestiny());
-        dataPrint.add("Vehiculo: " + this.getVehicle());
-        dataPrint.add("Pasajero: ");
-        dataPrint.add(" - " + this.getName());
-        dataPrint.add("Cedula: " + this.getSchedule());
-        dataPrint.add("G.S.RH: " + this.getRh());
+        dataPrint.add(("^XA^CFA,15^FO20,20^FDFecha Compra: " + this.getBuyDate() + "^FS"));
         return dataPrint;
     }
+
 
 }

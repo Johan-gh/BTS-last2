@@ -13,14 +13,14 @@ public class Bus {
     @PrimaryKey
     private String placa;
 
-    private String tipo_de_servicio;
+    private String capacidad;
 
-    private Integer capacidad;
+    private String tipo_servicio;
 
-    public Bus(String placa, String tipo_de_servicio, Integer capacidad){
+    public Bus(String placa, String capacidad, String tipo_servicio) {
         this.placa = placa;
-        this.tipo_de_servicio = tipo_de_servicio;
         this.capacidad = capacidad;
+        this.tipo_servicio = tipo_servicio;
     }
 
     public String getPlaca() {
@@ -31,19 +31,21 @@ public class Bus {
         this.placa = placa;
     }
 
-    public String getTipo_de_servicio() {
-        return tipo_de_servicio;
-    }
-
-    public void setTipo_de_servicio(String tipo_de_servicio) {
-        this.tipo_de_servicio = tipo_de_servicio;
-    }
-
-    public Integer getCapacidad() {
+    public String getCapacidad() {
         return capacidad;
     }
 
-    public void setCapacidad(Integer capacidad) {
+    public void setCapacidad(String capacidad) {
         this.capacidad = capacidad;
     }
+
+    public String getTipo_servicio() {
+        return tipo_servicio;
+    }
+
+    public void setTipo_servicio(String tipo_servicio) {
+        this.tipo_servicio = tipo_servicio;
+    }
+
+
 }

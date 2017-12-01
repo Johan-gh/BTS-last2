@@ -19,4 +19,10 @@
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_ajustes"
         app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/item4"
+        android:title="Ver itinerario"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_assignment_black_24dp"
+        app:showAsAction="ifRoom"/>
 </menu>

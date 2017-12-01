@@ -1,6 +1,8 @@
 package proyecto.prototicket;
 
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,9 +11,18 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MostrarQR extends AppCompatActivity {
+import proyecto.prototicket.schemas.Ticket.TicketDb;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
+import static proyecto.prototicket.Utils.ClassCompression.decode;
+
+public class MostrarQR extends AppCompatActivity {
+    private final String clave = "eKNuL3ipnlLAzfxTstV7CM4vIZybztLcZ4ItqPZ9";
     private TextView codigoQR;
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +37,22 @@ public class MostrarQR extends AppCompatActivity {
 
         if(bundle != null){
             String qr = bundle.getString("CodigoQR");
-            codigoQR.setText(qr);
+            try {
+                TicketDb ticketDb = decode(qr);
+                if(ticketDb.verifyTicket(clave)){
+                    Toast.makeText(this,"Tiquete valido", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(this,"Tiquete no valido",Toast.LENGTH_LONG).show();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+
         }else{
             Toast.makeText(this, "EL mensaje está vacio", Toast.LENGTH_LONG).show();
         }
@@ -53,6 +79,10 @@ public class MostrarQR extends AppCompatActivity {
             case R.id.item2:
                 Intent intent2 = new Intent(this, VerificarTicket.class);
                 startActivity(intent2);
+                break;
+            case R.id.item4:
+                Intent intent3 = new Intent(this, Pre_Itinerario.class);
+                startActivity(intent3);
                 break;
         }
         return super.onOptionsItemSelected(item);

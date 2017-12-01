@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<LinearLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_crear_ticket"
     android:layout_width="match_parent"
@@ -25,19 +30,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dateBuy"/>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:id="@+id/txtDateBuy"
-            android:enabled="false"
-            android:text=""
-            />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -87,12 +79,32 @@
             android:layout_height="wrap_content"
             android:text="@string/travelRoute"/>
 
-        <EditText
+        <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:id="@+id/txtTravelRoute"
-            android:text="" />
+            android:hint="Origen destino"
+            android:text="" ></AutoCompleteTextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Precio"/>
+
+        <EditText
+            android:id="@+id/txtPrecio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="precio"
+            android:inputType="textPersonName"
+            android:text=""></EditText>
 
     </LinearLayout>
 
@@ -105,12 +117,12 @@
             android:layout_height="wrap_content"
             android:text="@string/posting"/>
 
-        <EditText
+        <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text=""
-            android:id="@+id/txtPosting"/>
+            android:hint="punto de venta"
+            android:id="@+id/txtPosting"></AutoCompleteTextView>
 
     </LinearLayout>
 
@@ -135,7 +147,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -210,13 +221,17 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btnSave"
-            android:text="Save"
+            android:layout_centerHorizontal="true"
+            android:text="Imprimir"
             />
 
 
     </LinearLayout>
 
+
 </LinearLayout>
+
+</ScrollView>

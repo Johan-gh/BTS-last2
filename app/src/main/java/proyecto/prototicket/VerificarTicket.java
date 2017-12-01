@@ -27,6 +27,8 @@ public class VerificarTicket extends AppCompatActivity implements View.OnClickLi
 
     private static final int CAMERA_CODE = 1888;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +155,10 @@ public class VerificarTicket extends AppCompatActivity implements View.OnClickLi
             case R.id.item1:
                 Intent intent1 = new Intent(this, CrearTicket.class);
                 startActivity(intent1);
+                break;
+            case R.id.item4:
+                Intent intent2 = new Intent(this, Pre_Itinerario.class);
+                startActivity(intent2);
                 break;
         }
         return super.onOptionsItemSelected(item);

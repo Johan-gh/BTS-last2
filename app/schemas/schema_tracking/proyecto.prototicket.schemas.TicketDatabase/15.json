@@ -1,0 +1,164 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 15,
+    "identityHash": "f8b043915c76cd77c4c6bb01a03b92c8",
+    "entities": [
+      {
+        "tableName": "tabla_bus",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`placa` TEXT, `tipo_de_servicio` TEXT, `capacidad` INTEGER, PRIMARY KEY(`placa`))",
+        "fields": [
+          {
+            "fieldPath": "placa",
+            "columnName": "placa",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "tipo_de_servicio",
+            "columnName": "tipo_de_servicio",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "capacidad",
+            "columnName": "capacidad",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "placa"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "tabla_punto_venta",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT, `nombre` TEXT, `ciudad` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nombre",
+            "columnName": "nombre",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "ciudad",
+            "columnName": "ciudad",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "tabla_ruta",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT, `origen` TEXT, `destino` TEXT, `precio` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "origen",
+            "columnName": "origen",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "destino",
+            "columnName": "destino",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "precio",
+            "columnName": "precio",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "tabla_tiquete",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `uuid` TEXT, `ruta` TEXT, `valor` TEXT, `fecha_nicial` TEXT, `punto_venta` TEXT, `hora_llegada` TEXT, `fechaViaje` TEXT, `hora_salida` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "ruta",
+            "columnName": "ruta",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "valor",
+            "columnName": "valor",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "fecha_nicial",
+            "columnName": "fecha_nicial",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "punto_venta",
+            "columnName": "punto_venta",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "hora_llegada",
+            "columnName": "hora_llegada",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "fechaViaje",
+            "columnName": "fechaViaje",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "hora_salida",
+            "columnName": "hora_salida",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f8b043915c76cd77c4c6bb01a03b92c8\")"
+    ]
+  }
+}

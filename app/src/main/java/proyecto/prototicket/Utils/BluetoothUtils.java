@@ -70,7 +70,7 @@ public class BluetoothUtils {
 
                     // RPP300 is the name of the bluetooth printer device
                     // we got this name from the list of paired devices
-                    if (device.getName().equals("printerQL")) {
+                    if (device.getName().equals("printQln")) {
                         mmDevice = device;
                         break;
                     }
@@ -171,6 +171,8 @@ public class BluetoothUtils {
         }
     }
 
+
+
     public void sendData(ArrayList<String> printData) throws IOException {
         try {
 
@@ -221,4 +223,9 @@ public class BluetoothUtils {
         }
     }
 
+    public void write(String prueba) throws IOException {
+        String prueba1=prueba;
+        mmOutputStream.write(prueba.getBytes());
+
+    }
 }
