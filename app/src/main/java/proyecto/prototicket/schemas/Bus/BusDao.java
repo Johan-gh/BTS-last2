@@ -25,4 +25,8 @@ public interface BusDao {
 
     @Query("SELECT placa FROM tabla_bus WHERE numero_bus = :numeroBus")
     public LiveData<List<Bus>> verPlacaPorNumero(String numeroBus);
+
+
+    @Query("SELECT placa FROM tabla_bus WHERE numero_bus =:numeroBus")
+    public List<Bus> verPlaca(String numeroBus);
 }

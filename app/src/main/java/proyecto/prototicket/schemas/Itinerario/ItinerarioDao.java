@@ -26,5 +26,8 @@ public interface ItinerarioDao {
     public LiveData<List<Itinerario>> verItinerario(String origen, String destino);
 
     @Query("SELECT id, empresa, fecha_salida,hora_salida, origen, destino, numero_bus FROM tabla_itinerario WHERE empresa=:empresa AND origen=:origen AND destino=:destino")
-    public LiveData<List<Itinerario>> verItinerarioEmpresa(String empresa, String origen, String destino);
+    public List<Itinerario> verItinerarioEmpresa(String empresa, String origen, String destino);
+
+    @Query("SELECT id, empresa, fecha_salida, hora_salida, origen, destino, numero_bus FROM tabla_itinerario WHERE origen=:origen AND destino=:destino")
+    public List<Itinerario> verListaItinerario(String origen, String destino);
 }

@@ -2,9 +2,12 @@ package proyecto.prototicket;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -67,81 +70,80 @@ public class Itinerario extends AppCompatActivity implements LifecycleRegistryOw
 
     private void cargarItinerario(TicketDatabase db) {
 
-        List<String> rutaOrigen = new ArrayList<String>();
-        String split[] = variables.split("-");
-        String empresaId = split[0];
-        String origen = split[1];
-        String destino = split[2];
-        String tipoServicio = split[3];
-        if (empresaId.equals("null")){
-            db.ItinerarioDao().verItinerario(origen, destino).observe(Itinerario.this,(List<proyecto.prototicket.schemas.Itinerario.Itinerario> strinList) -> {
+        new AsyncTask<Void, Void, Boolean>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            protected Boolean doInBackground(Void... voids) {
 
-                for (proyecto.prototicket.schemas.Itinerario.Itinerario item : strinList) {
-                    String origendb = item.getOrigen().toString();
-                    String destinodb = item.getDestino().toString();
-                    String fechaSalida = item.getFecha_salida().toString();
-                    String horaSalida = item.getHora_salida().toString();
-                    String numero_bus = item.getNumero_bus().toString();
-                    String empresa_id = item.getEmpresa().toString();
+                List<String> rutaOrigen = new ArrayList<String>();
+                String split[] = variables.split("-");
+                String empresaId = split[0];
+                String origen = split[1];
+                String destino = split[2];
+                String tipoServicio = split[3];
 
-                    db.empresaDao().verEmpresaPorId(empresa_id).observe(Itinerario.this,(List<Empresa> empresaList)->{
-                        for(Empresa item1 : empresaList){
+                if (empresaId.equals("null")) {
 
-                            String nombredb = item1.getNombre().toString();
+                    for (proyecto.prototicket.schemas.Itinerario.Itinerario item : db.ItinerarioDao().verListaItinerario(origen, destino)) {
+                        String origendb = item.getOrigen().toString();
+                        String destinodb = item.getDestino().toString();
+                        String fechaSalida = item.getFecha_salida().toString();
+                        String horaSalida = item.getHora_salida().toString();
+                        String numero_bus = item.getNumero_bus().toString();
+                        String empresa_id = item.getEmpresa().toString();
 
-                            db.busDao().verPlacaPorNumero(numero_bus).observe(Itinerario.this, (List<Bus> busList)->{
-                               for(Bus item2:busList){
+                        for( Empresa item1 : db.empresaDao().verNombreEmpresaId(empresa_id)){
+                            String nombreEmpresa = item1.getNombre().toString();
 
-                                   String placadb = item2.getPlaca();
-                                   variableCrearT = origendb + "-" + destinodb + "~" + fechaSalida + "~" + horaSalida + "~" + nombredb + "~" + placadb;
-                                   rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + nombredb + "  " + placadb);
-                               }
+                            for(Bus item2 : db.busDao().verPlaca(numero_bus)) {
 
+                                String placaBus = item2.getPlaca().toString();
 
-                            });
-
-                        }
-                    });
-
-                }
-            });
-        }else{
-            db.ItinerarioDao().verItinerarioEmpresa(empresaId, origen, destino).observe(Itinerario.this,(List<proyecto.prototicket.schemas.Itinerario.Itinerario> strinList) -> {
-
-                for (proyecto.prototicket.schemas.Itinerario.Itinerario item : strinList) {
-                    String origendb = item.getOrigen().toString();
-                    String destinodb = item.getDestino().toString();
-                    String fechaSalida = item.getFecha_salida().toString();
-                    String horaSalida = item.getHora_salida().toString();
-                    String numero_bus = item.getNumero_bus().toString();
-                    db.empresaDao().verEmpresaPorId(empresaId).observe(Itinerario.this,(List<Empresa> empresaList)->{
-                        for(Empresa item1 : empresaList){
-                            String nombredb = item1.getNombre().toString();
-
-                            db.busDao().verPlacaPorNumero(numero_bus).observe(Itinerario.this, (List<Bus> busList)-> {
-                                for (Bus item2 : busList) {
-
-                                    String placadb = item2.getPlaca();
-                                    variableCrearT = origendb + "-" + destinodb + "~" + fechaSalida + "~" + horaSalida + "~" + nombredb + "~" + placadb;
-                                    rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + nombredb + "  " + placadb);
-                                }
-                            });
+                                variableCrearT = origendb + "-" + destinodb + "~" + fechaSalida + "~" + horaSalida + "~" + nombreEmpresa + "~" + placaBus;
+                                rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + nombreEmpresa + "  " + placaBus);
+                                String t = "";
+                            }
                         }
 
-                    });
 
+                    }
+
+                } else {
+
+                    for (proyecto.prototicket.schemas.Itinerario.Itinerario item : db.ItinerarioDao().verItinerarioEmpresa(empresaId, origen, destino)) {
+                        String origendb = item.getOrigen().toString();
+                        String destinodb = item.getDestino().toString();
+                        String fechaSalida = item.getFecha_salida().toString();
+                        String horaSalida = item.getHora_salida().toString();
+                        String numero_bus = item.getNumero_bus().toString();
+                        String empresa_id = item.getEmpresa().toString();
+
+                        for( Empresa item1 : db.empresaDao().verNombreEmpresaId(empresa_id)){
+                            String nombreEmpresa = item1.getNombre().toString();
+
+                            for(Bus item2 : db.busDao().verPlaca(numero_bus)) {
+
+                                String placaBus = item2.getPlaca().toString();
+
+                                variableCrearT = origendb + "-" + destinodb + "~" + fechaSalida + "~" + horaSalida + "~" + nombreEmpresa + "~" + placaBus;
+                                rutaOrigen.add(origendb + "-" + destinodb + "  " + fechaSalida + "  " + horaSalida + "  " + nombreEmpresa + "  " + placaBus);
+                                String t = "";
+                            }
+                        }
+
+
+                    }
 
                 }
-            });
-        }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(Itinerario.this, android.R.layout.simple_list_item_1, rutaOrigen);
 
+                listView.setAdapter(arrayAdapter);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                rutaOrigen );
+                return true;
 
-        listView.setAdapter(arrayAdapter);
+            }
+        }.execute();
+
     }
 
 

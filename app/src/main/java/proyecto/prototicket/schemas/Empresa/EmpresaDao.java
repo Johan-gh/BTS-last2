@@ -24,4 +24,7 @@ public interface EmpresaDao {
 
     @Query("SELECT nombre FROM tabla_empresa WHERE id = :empresaId")
     public LiveData<List<Empresa>> verEmpresaPorId(String empresaId);
+
+    @Query("SELECT nombre FROM tabla_empresa WHERE id = :idEmpresa")
+    public List<Empresa> verNombreEmpresaId(String idEmpresa);
 }
