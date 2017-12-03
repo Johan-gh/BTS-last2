@@ -20,28 +20,33 @@
         android:textSize="18dp"
         android:id="@+id/textView" />
 
-    <Button
-        android:id="@+id/btnSincronizar"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView"
-        android:onClick="click_sincronizar"
-        android:layout_marginLeft="29dp"
-        android:layout_marginStart="29dp"
-        android:layout_marginTop="34dp"
-        android:text="Sincronizar" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnSynTiquete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnSincronizar"
-        android:layout_centerHorizontal="true"
-        android:onClick="clic_sync_tiquetes"
-        android:layout_marginTop="34dp"
+        <Button
+            android:id="@+id/btnSincronizar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="click_sincronizar"
+            android:text="Sincronizar" />
 
-        android:text="Sincronizar Tiquetes" />
+        <Button
+            android:id="@+id/btnSynTiquete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnSincronizar"
+            android:layout_centerHorizontal="true"
+            android:onClick="click_sync_tiquetes"
+            android:text="Sincronizar Tiquetes" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnTerminarTurno"
+            android:text="Terminar turno"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

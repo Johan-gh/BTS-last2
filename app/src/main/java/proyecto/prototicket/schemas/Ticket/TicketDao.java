@@ -5,6 +5,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import java.util.List;
 
@@ -18,8 +19,11 @@ public interface TicketDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void crearTicket(TicketDb ticket);
 
-    @Query("SELECT  uuid,ruta, valor,fecha_nicial,punto_venta ,hora_llegada,fechaViaje,hora_salida FROM tabla_tiquete")
+    @Query("SELECT  uuid,ruta, valor,fecha_nicial,punto_venta ,hora_llegada,fechaViaje,hora_salida,sincro,cierre,empresa,empleado FROM tabla_tiquete")
     public List<TicketDb> verTiquete();
+
+    @Update
+    void actualizarTiquete(TicketDb ticketDb);
 
     @Delete
     public void eliminarTiquete(TicketDb ticketDb);

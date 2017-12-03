@@ -33,7 +33,7 @@ public class TicketRepository {
 
     public static JSONObject getDataTiquete(String uuid,int ruta, float valor, String fecha_inicial,
                                             int punto_venta, String hora_salida, String hora_llegada,
-                                            String fecha_viaje ){
+                                            String fecha_viaje,String sincro,String caja_cerrada ,String empresa,String empleado){
         try {
             JSONObject jObject = new JSONObject();
             jObject.put("id_global",uuid);
@@ -44,6 +44,10 @@ public class TicketRepository {
             jObject.put("hora_salida",hora_salida);
             jObject.put("hora_llegada",hora_llegada);
             jObject.put("fecha_viaje",fecha_viaje);
+            jObject.put("caja_cerrada",caja_cerrada);
+            jObject.put("empresa",empresa);
+            jObject.put("empleado",empleado);
+
 
             return jObject;
         }catch (JSONException ex){
@@ -58,22 +62,31 @@ public class TicketRepository {
             protected String doInBackground(Void... voids) {
                 tdbList = db.ticketDao().verTiquete();
                 for (TicketDb tdb:tdbList) {
-                    String uuid = tdb.getUuid().toString();
-                    String rutaStr = tdb.getRuta().toString();
-                    String[] rutaSplit = rutaStr.split("-");
-                    int ruta = Integer.parseInt(rutaSplit[0]);
-                    float valor =Float.parseFloat(tdb.getValor().toString());
-                    String fecha_inicial = tdb.getFecha_nicial().toString();
-                    int punto_venta = Integer.parseInt(tdb.getPunto_venta());
-                    String hora_salida = tdb.getHora_salida().toString();
-                    String hora_llegada = tdb.getHora_llegada().toString();
-                    String fecha_viaje = tdb.getFechaViaje().toString();
-                    guardarTiquete(uuid,ruta,valor,fecha_inicial,punto_venta,hora_salida,hora_llegada,fecha_viaje,db);
-                    TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta)
-                            ,hora_salida,hora_llegada,fecha_viaje);
-                    if ( success){
-                        db.ticketDao().eliminarTiquete(ticketDb);
-                        String prue = "";
+                    if(tdb.getSincro().toString().equals("False")) {
+                        String uuid = tdb.getUuid().toString();
+                        String rutaStr = tdb.getRuta().toString();
+                        String[] rutaSplit = rutaStr.split("-");
+                        int ruta = Integer.parseInt(rutaSplit[0]);
+                        float valor = Float.parseFloat(tdb.getValor().toString());
+                        String fecha_inicial = tdb.getFecha_nicial().toString();
+                        int punto_venta = Integer.parseInt(tdb.getPunto_venta());
+                        String hora_salida = tdb.getHora_salida().toString();
+                        String hora_llegada = tdb.getHora_llegada().toString();
+                        String fecha_viaje = tdb.getFechaViaje().toString();
+                        String sincro = tdb.getSincro().toString();
+                        String cierre = tdb.getCierre().toString();
+                        String empleado = tdb.getEmpleado().toString();
+                        String empresa = tdb.getEmpresa().toString();
+                        guardarTiquete(uuid, ruta, valor, fecha_inicial, punto_venta, hora_salida, hora_llegada, fecha_viaje, sincro, cierre, empleado, empresa, db);
+                        TicketDb ticketDb = new TicketDb(uuid, String.valueOf(ruta), String.valueOf(valor), fecha_inicial, String.valueOf(punto_venta)
+                                , hora_salida, hora_llegada, fecha_viaje, "True", cierre, empleado, empresa);
+                        if (success) {
+
+                            db.ticketDao().actualizarTiquete(ticketDb);
+
+                            String prue =tdb.getSincro().toString();
+                            String hola ="";
+                        }
                     }
                 }
                 return null;
@@ -84,7 +97,7 @@ public class TicketRepository {
 
     private String guardarTiquete(String uuid,int ruta, float valor, String fecha_inicial,
                                   int punto_venta, String hora_salida, String hora_llegada,
-                                  String fecha_viaje, TicketDatabase db) { //parametros del tiquete (Int,Float,String,int,String,String,String)
+                                  String fecha_viaje, String sincro, String cierre, String empleado, String empresa, TicketDatabase db) { //parametros del tiquete (Int,Float,String,int,String,String,String)
 
 
 
@@ -92,9 +105,9 @@ public class TicketRepository {
 
         //ruta y punto de venta TIENE que ser el id que se asigno en django
         TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta)
-                ,hora_salida,hora_llegada,fecha_viaje);
+                ,hora_salida,hora_llegada,fecha_viaje, sincro, cierre, empleado, empresa);
         JSONObject login = getDataTiquete(uuid,ruta,valor,fecha_inicial,punto_venta,
-                hora_salida,hora_llegada,fecha_viaje);
+                hora_salida,hora_llegada,fecha_viaje,sincro,cierre,empresa,empleado);
             /*JSONObject login = parser.getLoginObject(username,password);*/
         String message = login.toString();
         InputStream is = null;

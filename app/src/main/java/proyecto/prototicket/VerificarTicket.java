@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -28,14 +29,16 @@ public class VerificarTicket extends AppCompatActivity implements View.OnClickLi
     private static final int CAMERA_CODE = 1888;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verificar_ticket);
 
+
+
         scaner = (Button) findViewById(R.id.btnScanQR);
         scaner.setOnClickListener(this);
+
     }
 
     @Override

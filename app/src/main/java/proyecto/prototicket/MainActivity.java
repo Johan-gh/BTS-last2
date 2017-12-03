@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText txtUser;
     private EditText txtPassword;
+
+    public static String usuario;
     BluetoothUtils bT;
 
     @Override
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (password == null || password.equalsIgnoreCase("")) {
             Toast.makeText(this, "Debe ingresar una clave", Toast.LENGTH_LONG).show();
         } else if (password.equals("1234") && user.equals("edison")) {
+            usuario = user;
             Intent intent = new Intent(this, CrearTicket.class);
             startActivity(intent);
             Toast.makeText(this, "inicio sesión", Toast.LENGTH_LONG).show();

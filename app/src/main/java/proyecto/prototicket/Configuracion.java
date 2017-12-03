@@ -86,7 +86,7 @@ public class Configuracion extends AppCompatActivity {
     }
 
 
-    public void clic_sync_tiquetes(View view) {
+    public void click_sync_tiquetes(View view) {
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
         ticketRepository = new TicketRepository();
         ticketRepository.restTiquete(db);

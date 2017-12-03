@@ -27,10 +27,14 @@ public class TicketDb {
     private String fechaViaje;
     private String hora_salida;//hora viaje "12:12:00"
     private String DS;
+    private String sincro;
+    private String cierre;
+    private String empleado;
+    private String empresa;
 
 
 
-    public TicketDb(String uuid, String ruta, String valor, String fecha_nicial, String punto_venta, String hora_llegada, String fechaViaje, String hora_salida) {
+    public TicketDb(String uuid, String ruta, String valor, String fecha_nicial, String punto_venta, String hora_llegada, String fechaViaje, String hora_salida, String sincro, String cierre, String empleado, String empresa) {
         this.uuid = uuid;
         this.ruta = ruta;
         this.valor = valor;
@@ -40,10 +44,14 @@ public class TicketDb {
         this.fechaViaje = fechaViaje;
         this.hora_salida = hora_salida;
         this.DS = null;
+        this.sincro = sincro;
+        this.cierre = cierre;
+        this.empleado = empleado;
+        this.empresa = empresa;
     }
 
     @Ignore
-    public TicketDb(String uuid, String ruta, String valor, String fecha_nicial, String punto_venta, String hora_llegada, String fechaViaje, String hora_salida, String DS) {
+    public TicketDb(String uuid, String ruta, String valor, String fecha_nicial, String punto_venta, String hora_llegada, String fechaViaje, String hora_salida,String DS) {
         this.uuid = uuid;
         this.ruta = ruta;
         this.valor = valor;
@@ -53,6 +61,41 @@ public class TicketDb {
         this.fechaViaje = fechaViaje;
         this.hora_salida = hora_salida;
         this.DS = DS;
+
+
+    }
+
+
+    public String getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(String usuario) {
+        this.empleado = usuario;
+    }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    public String getSincro() {
+        return sincro;
+    }
+
+    public void setSincro(String sincro) {
+        this.sincro = sincro;
+    }
+
+    public String getCierre() {
+        return cierre;
+    }
+
+    public void setCierre(String cierre) {
+        this.cierre = cierre;
     }
 
     public String getUuid() {return uuid;}
