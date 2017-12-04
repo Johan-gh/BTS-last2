@@ -49,6 +49,8 @@ public class BluetoothUtils {
         }
     }
 
+
+
     private void findBT() {
 
         try {
@@ -83,7 +85,7 @@ public class BluetoothUtils {
     }
 
 
-    private void openBT() throws IOException {
+    public void openBT() throws IOException {
         try {
 
             // Standard SerialPortService ID
@@ -224,7 +226,6 @@ public class BluetoothUtils {
     }
 
     public void write(String prueba) throws IOException {
-        String prueba1=prueba;
         mmOutputStream.write(prueba.getBytes());
 
     }

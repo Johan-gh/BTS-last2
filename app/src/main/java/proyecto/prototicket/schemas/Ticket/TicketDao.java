@@ -27,4 +27,7 @@ public interface TicketDao {
 
     @Delete
     public void eliminarTiquete(TicketDb ticketDb);
+
+    @Query("SELECT uuid,ruta, valor,fecha_nicial,punto_venta ,hora_llegada,fechaViaje,hora_salida,sincro,cierre,empresa,empleado FROM tabla_tiquete WHERE empleado = :empleado AND cierre = :flag")
+    public List<TicketDb> obtenerTicketPorEmpleado(String empleado, String flag);
 }

@@ -61,6 +61,7 @@ public class ItinerarioRepository {
             String mensaje = "";
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String num_bus = jsonObject.optString("numero_bus");
                 exec = Executors.newSingleThreadExecutor();
                 exec.execute(() -> {
 

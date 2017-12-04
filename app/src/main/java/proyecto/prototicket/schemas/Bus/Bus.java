@@ -10,8 +10,11 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "tabla_bus")
 public class Bus {
 
+
     @PrimaryKey
     private String placa;
+
+    private String id;
 
     private String capacidad;
 
@@ -19,11 +22,20 @@ public class Bus {
 
     private String numero_bus;
 
-    public Bus(String placa, String capacidad, String tipo_servicio, String numero_bus) {
+    public Bus(String id,String placa, String capacidad, String tipo_servicio, String numero_bus) {
+        this.id=id;
         this.placa = placa;
         this.capacidad = capacidad;
         this.tipo_servicio = tipo_servicio;
         this.numero_bus = numero_bus;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNumero_bus() {

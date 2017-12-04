@@ -72,7 +72,8 @@ public class BusRepository {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 exec = Executors.newSingleThreadExecutor();
                 exec.execute(() -> {
-                    db.busDao().crearBus(new Bus(jsonObject.optString("placa"),jsonObject.optString("capacidad"),jsonObject.optString("tipo_servicio"),jsonObject.optString("numero_bus")));
+
+                    db.busDao().crearBus(new Bus(jsonObject.optString("id"),jsonObject.optString("placa"),jsonObject.optString("capacidad"),jsonObject.optString("numero_bus"),jsonObject.optString("tipo_servicio")));
                 });
             }
         }catch (MalformedURLException e){
