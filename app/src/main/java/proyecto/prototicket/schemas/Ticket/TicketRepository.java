@@ -33,7 +33,7 @@ public class TicketRepository {
     private static final String FAILURES_MESSAGE =  "Something went wrong";
     private CrearTicket crearTicket;
     private Boolean success = false;
-    private Boolean succesCierre = false;
+    public Boolean succesCierre = false;
     List<TicketDb> tdbList ;
     Configuracion configuracion;
 
@@ -104,8 +104,8 @@ public class TicketRepository {
                         String empleado = tdb.getEmpleado().toString();
                         String empresa = tdb.getEmpresa().toString();
                         guardarTiquete(uuid, ruta, valor, fecha_inicial, punto_venta, hora_salida, hora_llegada, fecha_viaje, sincro, cierre, empleado, empresa, db);
-                        TicketDb ticketDb = new TicketDb(uuid, String.valueOf(ruta), String.valueOf(valor), fecha_inicial, String.valueOf(punto_venta)
-                                , hora_salida, hora_llegada, fecha_viaje, "True", cierre, empleado, empresa);
+                        TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta),hora_llegada,fecha_viaje,
+                                hora_salida,"True",cierre,empleado,empresa);
                         if (success) {
 
                             db.ticketDao().actualizarTiquete(ticketDb);
@@ -119,58 +119,7 @@ public class TicketRepository {
 
     }
 
-    public void restCierre(TicketDatabase db) {
-        String empleado="";
 
-        new AsyncTask<Void,Void,String>(){
-
-            @Override
-            protected String doInBackground(Void... voids) {
-                float total = 0;
-                String empleadoActial = "";
-                tdbList = db.ticketDao().obtenerTicketPorEmpleado("7","False");
-                List<String> lista = new ArrayList<>();
-                for (TicketDb tdb:tdbList) {
-                    if(tdb.getCierre().toString().equals("False")) {
-                        String uuid = tdb.getUuid().toString();
-                        String rutaStr = tdb.getRuta().toString();
-                        String[] rutaSplit = rutaStr.split("-");
-                        int ruta = Integer.parseInt(rutaSplit[0]);
-                        float valor = Float.parseFloat(tdb.getValor().toString());
-                        total += valor;
-                        String fecha_inicial = tdb.getFecha_nicial().toString();
-                        int punto_venta = Integer.parseInt(tdb.getPunto_venta());
-                        String hora_salida = tdb.getHora_salida().toString();
-                        String hora_llegada = tdb.getHora_llegada().toString();
-                        String fecha_viaje = tdb.getFechaViaje().toString();
-                        String sincro = tdb.getSincro().toString();
-                        String cierre = tdb.getCierre().toString();
-                        String empleado = tdb.getEmpleado().toString();
-                        empleadoActial=empleado;
-                        String empresa = tdb.getEmpresa().toString();
-
-                        //lista.add(uuid +"-"+ruta+"-"+valor+"-"+fecha_inicial+"-"+ punto_venta+"-"+hora_salida+"-"+hora_llegada+"-"+fecha_viaje+"-"+sincro+"-"+cierre+"-"+empleado+"-"+empresa);
-                        TicketDb ticketDb = new TicketDb(uuid, String.valueOf(ruta), String.valueOf(valor), fecha_inicial, String.valueOf(punto_venta)
-                                , hora_salida, hora_llegada, fecha_viaje, sincro, "True", empleado, empresa);
-
-
-
-                            //db.ticketDao().actualizarTiquete(ticketDb);
-
-
-                    }
-                }
-                if (tdbList.size()>0){
-                    guardarRestcierreCaja(empleadoActial,"2017-12-03","18:30",String.valueOf(tdbList.size()),String.valueOf(total));
-                }
-                if (succesCierre){
-                    configuracion = new Configuracion();
-                    configuracion.imprimirCierreCaja(empleadoActial,"2017-12-03","18:30",String.valueOf(tdbList.size()),String.valueOf(total),this);
-                }
-                return null;
-            }
-        }.execute();
-    }
 
     private String guardarTiquete(String uuid,int ruta, float valor, String fecha_inicial,
                                   int punto_venta, String hora_salida, String hora_llegada,
@@ -242,7 +191,7 @@ public class TicketRepository {
         }
     }
 
-    private String guardarRestcierreCaja(String empleado,String fecha,String hora, String numero_tiquetes,
+    public String guardarRestcierreCaja(String empleado,String fecha,String hora, String numero_tiquetes,
                                   String valor_total_tiquetes){
 
         String mesaje = "";

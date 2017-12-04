@@ -62,7 +62,7 @@ import proyecto.prototicket.schemas.TicketDatabase;
 import static proyecto.prototicket.Utils.ClassCompression.encode;
 
 
-public class CrearTicket extends AppCompatActivity implements View.OnClickListener,LifecycleRegistryOwner, View.OnTouchListener {
+public class CrearTicket extends AppCompatActivity implements View.OnClickListener,LifecycleRegistryOwner {
     private final String clave = "eKNuL3ipnlLAzfxTstV7CM4vIZybztLcZ4ItqPZ9";
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
     private EditText txtFecha, txtHora, txtCedula, txtPasajero, txtRH, txtTravelRoute, txtPosting;
@@ -139,7 +139,6 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         btnCodigoCedula.setOnClickListener(this);
         txtFecha.setOnClickListener(this);
         txtHora.setOnClickListener(this);
-        txtPrecio.setOnTouchListener(this);
 
         btnSave = (Button) findViewById(R.id.btnSave);
 
@@ -153,8 +152,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                         txtHora.getText().equals("") ||
                         txtOrigenDestino.getText().equals("") ||
                         txtPrecio.getText().toString().equals("") ||
-                        txtPasajero.getText().toString().equals(""))
-                        //txtCedula.getText().toString().equals(""))
+                        txtPasajero.getText().toString().equals("") ||
+                        txtCedula.getText().toString().equals(""))
                 {
 
                     fastToast("Por favor ingrese todos los datos solicitados");
@@ -690,7 +689,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         return mRegistry;
     }
 
-    @Override
+    /*@Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
         if(view.getId() == R.id.txtPrecio){
@@ -706,7 +705,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         }
 
         return true;
-    }
+    }*/
 }
 
 // TODO: Pasar texto escrito aqui a referencias en string.xml
