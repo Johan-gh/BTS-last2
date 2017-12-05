@@ -27,4 +27,5 @@ public interface EmpresaDao {
 
     @Query("SELECT nombre FROM tabla_empresa WHERE id = :idEmpresa")
     public List<Empresa> verNombreEmpresaId(String idEmpresa);
+
 }

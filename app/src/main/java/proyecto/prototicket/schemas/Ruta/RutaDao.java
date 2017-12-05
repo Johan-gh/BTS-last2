@@ -25,6 +25,12 @@ public interface RutaDao {
     public List<Ruta> verificarRuta(String origen,String destino);
 
 
+    @Query("SELECT precio_E FROM tabla_ruta WHERE origen = :origen AND destino=:destino AND empresaId = :empresaId")
+    public String obtenerPrecioE(String origen, String destino, String empresaId);
+
+    @Query("SELECT precio_N FROM tabla_ruta WHERE origen = :origen AND destino=:destino AND empresaId = :empresaId")
+    public String obtenerPrecioN(String origen, String destino, String empresaId);
+
 
 }
 //(origen + '/' + destino) as ruta

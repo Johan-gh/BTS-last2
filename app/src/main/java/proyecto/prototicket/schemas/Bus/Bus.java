@@ -22,12 +22,23 @@ public class Bus {
 
     private String numero_bus;
 
-    public Bus(String id,String placa, String capacidad, String tipo_servicio, String numero_bus) {
+    private String empresaId;
+
+    public Bus(String id,String placa, String capacidad, String tipo_servicio, String numero_bus, String empresaId) {
         this.id=id;
         this.placa = placa;
         this.capacidad = capacidad;
         this.tipo_servicio = tipo_servicio;
         this.numero_bus = numero_bus;
+        this.empresaId = empresaId;
+    }
+
+    public String getEmpresaId() {
+        return empresaId;
+    }
+
+    public void setEmpresaId(String empresaId) {
+        this.empresaId = empresaId;
     }
 
     public String getId() {

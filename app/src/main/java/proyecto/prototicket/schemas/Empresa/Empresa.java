@@ -15,6 +15,7 @@ public class Empresa {
     private String nombre;
     private String nit;
 
+
     public Empresa(String id, String nombre, String nit) {
         this.id = id;
         this.nombre = nombre;

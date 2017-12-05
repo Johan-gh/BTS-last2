@@ -62,7 +62,7 @@ import proyecto.prototicket.schemas.TicketDatabase;
 import static proyecto.prototicket.Utils.ClassCompression.encode;
 
 
-public class CrearTicket extends AppCompatActivity implements View.OnClickListener,LifecycleRegistryOwner {
+public class CrearTicket extends AppCompatActivity implements View.OnClickListener,LifecycleRegistryOwner, View.OnTouchListener  {
     private final String clave = "eKNuL3ipnlLAzfxTstV7CM4vIZybztLcZ4ItqPZ9";
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
     private EditText txtFecha, txtHora, txtCedula, txtPasajero, txtRH, txtTravelRoute, txtPosting;
@@ -70,6 +70,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
     AutoCompleteTextView txtPuntoVenta;
     AutoCompleteTextView txtOrigenDestino;
     List<TicketDb> tdbList ;
+
+    private String precio;
 
     private String variables;
 
@@ -85,6 +87,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
     boolean busExiste;
     private UUID uuid ;
     private int dia, mes, anio, hora, minutos;
+
 
     private static final int CAMERA_CODE = 1888;
     BluetoothUtils bT;
@@ -139,6 +142,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         btnCodigoCedula.setOnClickListener(this);
         txtFecha.setOnClickListener(this);
         txtHora.setOnClickListener(this);
+        txtPrecio.setOnTouchListener(this);
+
 
         btnSave = (Button) findViewById(R.id.btnSave);
 
@@ -689,23 +694,61 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         return mRegistry;
     }
 
-    /*@Override
+    @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-
         if(view.getId() == R.id.txtPrecio){
             String id = rutaId.get(txtOrigenDestino.getText().toString());
-            if(txtOrigenDestino.getText().toString().equals("") || id == null){
+            if(txtOrigenDestino.getText().toString().equals("") || id == null || txtVehicle.getText().toString().equals("")){
                 txtPrecio.setText("");
             }else {
-                String split[] = id.split("-");
-                String precio = split[1];
-                txtPrecio.setText(precio);
-            }
+                TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
+                try {
+                    new AsyncTask<Void, Void, String>() {
 
+                        @Override
+                        protected String doInBackground(Void... voids) {
+                            String precio_n = "";
+                            List<Bus> buses = db.busDao().verificarServicio(txtVehicle.getText().toString());
+                            for (Bus it : buses) {
+                                String split[] = (txtOrigenDestino.getText().toString()).split("-");
+                                String origen = split[0];
+                                String destino = split[1];
+                                String empresaId = it.getEmpresaId().toString();
+                                String servicio = it.getTipo_servicio().toString();
+                                if (servicio.equals("Especial")) {
+                                    precio_n = db.rutaDao().obtenerPrecioE(origen, destino, empresaId).toString();
+                                    precio = precio_n;
+                                } else if (servicio.equals("Normal")) {
+                                    precio_n = db.rutaDao().obtenerPrecioN(origen, destino, empresaId).toString();
+                                    precio = precio_n;
+                                }
+                            }
+                            try {
+                                return precio_n;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            return "";
+                        }
+
+                        @Override
+                        protected void onPostExecute(String buses) {
+                            precio=buses;
+                        }
+
+                    }.execute();
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            txtPrecio.setText(precio);
         }
 
         return true;
-    }*/
+    }
+
+
 }
 
 // TODO: Pasar texto escrito aqui a referencias en string.xml

@@ -17,14 +17,24 @@ public class Ruta {
     private String precio_N;
     private String precio_E;
     private String habilitada;
+    private String empresaId;
 
-    public Ruta(String id, String origen, String destino, String precio_N, String precio_E, String habilitada) {
+    public Ruta(String id, String origen, String destino, String precio_N, String precio_E, String habilitada, String empresaId) {
         this.id = id;
         this.origen = origen;
         this.destino = destino;
         this.precio_N = precio_N;
         this.precio_E = precio_E;
         this.habilitada = habilitada;
+        this.empresaId = empresaId;
+    }
+
+    public String getEmpresaId() {
+        return empresaId;
+    }
+
+    public void setEmpresaId(String empresaId) {
+        this.empresaId = empresaId;
     }
 
     public String getId() {
