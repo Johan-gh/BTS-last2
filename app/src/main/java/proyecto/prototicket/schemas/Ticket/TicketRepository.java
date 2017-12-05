@@ -103,9 +103,13 @@ public class TicketRepository {
                         String cierre = tdb.getCierre().toString();
                         String empleado = tdb.getEmpleado().toString();
                         String empresa = tdb.getEmpresa().toString();
-                        guardarTiquete(uuid, ruta, valor, fecha_inicial, punto_venta, hora_salida, hora_llegada, fecha_viaje, sincro, cierre, empleado, empresa, db);
-                        TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta),hora_llegada,fecha_viaje,
-                                hora_salida,"True",cierre,empleado,empresa);
+                        String placaBus = tdb.getPlacaBus().toString();
+                        String despachado = tdb.getDespachado().toString();
+                        guardarTiquete(uuid, ruta, placaBus, valor, fecha_inicial, punto_venta, hora_salida, hora_llegada, fecha_viaje, sincro, cierre, empleado, empresa, despachado, db);
+
+                        TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),placaBus,String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta),hora_llegada,fecha_viaje,hora_salida,"True",cierre,empleado,empresa,despachado);
+                        //TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta),hora_llegada,fecha_viaje,
+                                //hora_salida,"True",cierre,empleado,empresa);
                         if (success) {
 
                             db.ticketDao().actualizarTiquete(ticketDb);
@@ -121,17 +125,17 @@ public class TicketRepository {
 
 
 
-    private String guardarTiquete(String uuid,int ruta, float valor, String fecha_inicial,
+    private String guardarTiquete(String uuid,int ruta, String placaBus, float valor, String fecha_inicial,
                                   int punto_venta, String hora_salida, String hora_llegada,
-                                  String fecha_viaje, String sincro, String cierre, String empleado, String empresa, TicketDatabase db) { //parametros del tiquete (Int,Float,String,int,String,String,String)
+                                  String fecha_viaje, String sincro, String cierre, String empleado, String empresa, String despachado, TicketDatabase db) { //parametros del tiquete (Int,Float,String,int,String,String,String)
 
 
 
         String mesaje = "";
 
         //ruta y punto de venta TIENE que ser el id que se asigno en django
-        TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta)
-                ,hora_salida,hora_llegada,fecha_viaje, sincro, cierre, empleado, empresa);
+        TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),placaBus ,String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta)
+                ,hora_salida,hora_llegada,fecha_viaje, sincro, cierre, empleado, empresa, despachado);
         JSONObject login = getDataTiquete(uuid,ruta,valor,fecha_inicial,punto_venta,
                 hora_salida,hora_llegada,fecha_viaje,sincro,cierre,empresa,empleado);
             /*JSONObject login = parser.getLoginObject(username,password);*/

@@ -47,6 +47,13 @@
             android:id="@+id/btnTerminarTurno"
             android:onClick="click_cierre"
             android:text="Terminar turno"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/despacharBus"
+            android:onClick="click_despacharBus"
+            android:text="Despachar bus"/>
     </LinearLayout>
 
 

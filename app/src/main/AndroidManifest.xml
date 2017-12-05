@@ -48,9 +48,29 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Pre_Itinerario" />
-        <activity android:name=".Itinerario" />
-        <!--<activity android:name=".ver_itinerario"></activity>-->
+        <activity android:name=".Pre_Itinerario">
+            <intent-filter>
+                <action android:name="android.intent.action.PREITINERARIO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Itinerario">
+            <intent-filter>
+                <action android:name="android.intent.action.ITINERARIO" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- <activity android:name=".ver_itinerario"></activity> -->
+        <activity android:name=".DepacharBus">
+            <intent-filter>
+                <action android:name="android.intent.action.DESPACHARBUS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

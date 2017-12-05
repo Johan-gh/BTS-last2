@@ -579,8 +579,9 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             String fecha_inicio = setDate().format(Calendar.getInstance().getTime()).toString();
             String fecha_viaje = txtFecha.getText().toString();
             String hora_salida = txtHora.getText().toString();
+            String placaBus = txtVehicle.getText().toString();
             uuid= UUID.randomUUID();
-            TicketDb ticketDb = new TicketDb(uuid.toString(),rutaIdStr, precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "False","False","7","5" );
+            TicketDb ticketDb = new TicketDb(uuid.toString(),rutaIdStr, placaBus,precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "False","False","7","5","False" );
             ticketDb.signTicket(clave);
         String logo_metis = "^FX Top section with company logo, name and address." +
                 "^CF0,30" +
@@ -699,7 +700,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         if(view.getId() == R.id.txtPrecio){
             String id = rutaId.get(txtOrigenDestino.getText().toString());
             if(txtOrigenDestino.getText().toString().equals("") || id == null || txtVehicle.getText().toString().equals("")){
-                txtPrecio.setText("");
+                precio = "";
             }else {
                 TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
                 try {
@@ -745,7 +746,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             txtPrecio.setText(precio);
         }
 
-        return true;
+        return false;
     }
 
 

@@ -113,6 +113,12 @@ public class Configuracion extends AppCompatActivity {
         restCierre(db);
     }
 
+    public void click_despacharBus(View view){
+
+        Intent intent = new Intent(Configuracion.this, DepacharBus.class);
+        startActivity(intent);
+    }
+
     private SimpleDateFormat setDate() {
         return new SimpleDateFormat("yyyy-MM-dd");
     }
@@ -134,6 +140,7 @@ public class Configuracion extends AppCompatActivity {
                     if(tdb.getCierre().toString().equals("False")) {
                         String uuid = tdb.getUuid().toString();
                         String rutaStr = tdb.getRuta().toString();
+                        String placaBus = tdb.getPlacaBus().toString();
                         String[] rutaSplit = rutaStr.split("-");
                         int ruta = Integer.parseInt(rutaSplit[0]);
                         float valor = Float.parseFloat(tdb.getValor().toString());
@@ -148,13 +155,14 @@ public class Configuracion extends AppCompatActivity {
                         String empleado = tdb.getEmpleado().toString();
                         empleadoActial=empleado;
                         String empresa = tdb.getEmpresa().toString();
+                        String despachado = tdb.getDespachado().toString();
 
                         //lista.add(uuid +"-"+ruta+"-"+valor+"-"+fecha_inicial+"-"+ punto_venta+"-"+hora_salida+"-"+hora_llegada+"-"+fecha_viaje+"-"+sincro+"-"+cierre+"-"+empleado+"-"+empresa);
-                        TicketDb ticketDb3 = new TicketDb(uuid, String.valueOf(ruta), String.valueOf(valor), fecha_inicial, String.valueOf(punto_venta)
-                                , hora_salida, hora_llegada, fecha_viaje, sincro, "True", empleado, empresa);
+                        TicketDb ticketDb3 = new TicketDb(uuid, String.valueOf(ruta), placaBus, String.valueOf(valor), fecha_inicial, String.valueOf(punto_venta)
+                                , hora_salida, hora_llegada, fecha_viaje, sincro, "True", empleado, empresa,despachado);
 
-                        TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta),hora_llegada,fecha_viaje,
-                                hora_salida,sincro,"True",empleado,empresa);
+                        TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta), placaBus, String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta),hora_llegada,fecha_viaje,
+                                hora_salida,sincro,"True",empleado,empresa, despachado);
 
                         tickets_cerrados.add(ticketDb);
                         //db.ticketDao().actualizarTiquete(ticketDb);

@@ -20,6 +20,7 @@ public class TicketDb {
     @PrimaryKey
     private String uuid;
     private String ruta;//int (id)
+    private String placaBus;
     private String valor;//se saca de la ruta (int)
     private String fecha_nicial;//fecha de compra "2017-12-17"
     private String punto_venta;//int (id)
@@ -31,16 +32,15 @@ public class TicketDb {
     private String cierre;
     private String empleado;
     private String empresa;
+    private String despachado;
 
-
-
-    public TicketDb(String uuid, String ruta, String valor, String fecha_nicial, String punto_venta, String hora_llegada, String fechaViaje, String hora_salida, String sincro, String cierre, String empleado, String empresa) {
+    public TicketDb(String uuid, String ruta, String placaBus, String valor, String fecha_nicial, String punto_venta, String hora_llegada, String fechaViaje, String hora_salida, String sincro, String cierre, String empleado, String empresa, String despachado) {
         this.uuid = uuid;
         this.ruta = ruta;
         this.valor = valor;
         this.fecha_nicial = fecha_nicial;
         this.punto_venta = punto_venta;
-        this.hora_llegada = "00:00";
+        this.hora_llegada = hora_llegada;
         this.fechaViaje = fechaViaje;
         this.hora_salida = hora_salida;
         this.DS = null;
@@ -48,6 +48,8 @@ public class TicketDb {
         this.cierre = cierre;
         this.empleado = empleado;
         this.empresa = empresa;
+        this.placaBus = placaBus;
+        this.despachado = despachado;
     }
 
     @Ignore
@@ -65,6 +67,21 @@ public class TicketDb {
 
     }
 
+    public String getDespachado() {
+        return despachado;
+    }
+
+    public void setDespachado(String despachado) {
+        this.despachado = despachado;
+    }
+
+    public String getPlacaBus() {
+        return placaBus;
+    }
+
+    public void setPlacaBus(String placaBus) {
+        this.placaBus = placaBus;
+    }
 
     public String getEmpleado() {
         return empleado;

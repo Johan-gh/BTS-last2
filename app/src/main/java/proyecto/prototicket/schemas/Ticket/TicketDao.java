@@ -19,7 +19,7 @@ public interface TicketDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void crearTicket(TicketDb ticket);
 
-    @Query("SELECT  uuid,ruta, valor,fecha_nicial,punto_venta ,hora_llegada,fechaViaje,hora_salida,sincro,cierre,empresa,empleado FROM tabla_tiquete")
+    @Query("SELECT  uuid,ruta,placaBus ,valor,fecha_nicial,punto_venta ,hora_llegada,fechaViaje,hora_salida,sincro,cierre,empresa,empleado, despachado FROM tabla_tiquete")
     public List<TicketDb> verTiquete();
 
     @Update
@@ -28,6 +28,9 @@ public interface TicketDao {
     @Delete
     public void eliminarTiquete(TicketDb ticketDb);
 
-    @Query("SELECT uuid,ruta, valor,fecha_nicial,punto_venta ,hora_llegada,fechaViaje,hora_salida,sincro,cierre,empresa,empleado FROM tabla_tiquete WHERE empleado = :empleado AND cierre = :flag")
+    @Query("SELECT uuid,ruta, placaBus, valor,fecha_nicial,punto_venta ,hora_llegada,fechaViaje,hora_salida,sincro,cierre,empresa,empleado, despachado FROM tabla_tiquete WHERE empleado = :empleado AND cierre = :flag")
     public List<TicketDb> obtenerTicketPorEmpleado(String empleado, String flag);
+
+    @Query("SELECT placaBus FROM tabla_tiquete WHERE despachado = :despachado")
+    public List<TicketDb> obtenerPlacasBuses(String despachado);
 }
