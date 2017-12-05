@@ -405,7 +405,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                 reading = result.getContents();
 
                 // limpieza de la cedula para soportar los formatos existentes
-                cleaned_reading = reading.replaceAll("(00(?=\\d+\\p{L}{2,}(\\s+|\0+)))|((\0+|\\s+)0(?=(M|F)\\d{8}))|\\s+|(\0+PubDSK_1\0+)|\0+|((?<=\\d)(?=\\p{L}{2,}))|((?<=M|F)(?=\\d{8}))|((?<=(M|F)\\d{8})(?=\\d+(O|A|B|(AB))(\\+|-)))|(?=(O|A|B|(AB))(\\+|-))", " || ");
+                cleaned_reading = reading.replaceAll("((\0+|\\s+)0(?=(M|F)\\d{8}))|\\s+|(\0+PubDSK_1\0+)|\0+|((?<=\\d)(?=\\p{L}{2,}))|((?<=M|F)(?=\\d{8}))|((?<=(M|F)\\d{8})(?=\\d+(O|A|B|(AB))(\\+|-)))|(?=(O|A|B|(AB))(\\+|-))|(?:(?<=\\d{8})(?=\\d{10}[^\\W\\d_]+))", " || ");
 
                 // elimina huella digital que va despues del tipo de sangre
                 cleaned_reading = cleaned_reading.replaceAll("(?<=(O|A|B|(AB))(\\+|-)).*","");
