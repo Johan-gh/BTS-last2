@@ -582,7 +582,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             String hora_salida = txtHora.getText().toString();
             String placaBus = txtVehicle.getText().toString();
             uuid= UUID.randomUUID();
-            TicketDb ticketDb = new TicketDb(uuid.toString(),rutaIdStr, placaBus,precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "False","False","7","5","False" );
+            TicketDb ticketDb = new TicketDb(uuid.toString(),rutaIdStr, placaBus,precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "False","False","7","5","false" );
             ticketDb.signTicket(clave);
         String logo_metis = "^FX Top section with company logo, name and address." +
                 "^CF0,30" +
@@ -747,7 +747,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             txtPrecio.setText(precio);
         }
 
-        return false;
+        return true;
     }
 
 

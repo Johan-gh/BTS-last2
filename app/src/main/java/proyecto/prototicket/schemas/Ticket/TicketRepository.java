@@ -37,13 +37,14 @@ public class TicketRepository {
     List<TicketDb> tdbList ;
     Configuracion configuracion;
 
-    public static JSONObject getDataTiquete(String uuid,int ruta, float valor, String fecha_inicial,
+    public static JSONObject getDataTiquete(String uuid, int ruta, String placa, float valor, String fecha_inicial,
                                             int punto_venta, String hora_salida, String hora_llegada,
-                                            String fecha_viaje,String sincro,String caja_cerrada ,String empresa,String empleado){
+                                            String fecha_viaje, String sincro, String caja_cerrada, String empresa, String empleado, String despacho){
         try {
             JSONObject jObject = new JSONObject();
             jObject.put("id_global",uuid);
             jObject.put("ruta",ruta);
+            jObject.put("placa",placa);
             jObject.put("empresa",empresa); 
             jObject.put("empleado",empleado);
             jObject.put("valor",valor);
@@ -136,8 +137,8 @@ public class TicketRepository {
         //ruta y punto de venta TIENE que ser el id que se asigno en django
         TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta),placaBus ,String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta)
                 ,hora_salida,hora_llegada,fecha_viaje, sincro, cierre, empleado, empresa, despachado);
-        JSONObject login = getDataTiquete(uuid,ruta,valor,fecha_inicial,punto_venta,
-                hora_salida,hora_llegada,fecha_viaje,sincro,cierre,empresa,empleado);
+        JSONObject login = getDataTiquete(uuid,ruta,placaBus,valor,fecha_inicial,punto_venta,
+                hora_salida,hora_llegada,fecha_viaje,sincro,cierre,empresa,empleado,"false");
             /*JSONObject login = parser.getLoginObject(username,password);*/
         String message = login.toString();
         InputStream is = null;

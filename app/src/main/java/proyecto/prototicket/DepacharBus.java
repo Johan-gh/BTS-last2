@@ -4,114 +4,55 @@ import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.persistence.room.Room;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 
+import proyecto.prototicket.Utils.BluetoothUtils;
 import proyecto.prototicket.schemas.Ruta.Ruta;
 import proyecto.prototicket.schemas.Ticket.TicketDb;
 import proyecto.prototicket.schemas.TicketDatabase;
 
 public class DepacharBus extends AppCompatActivity implements LifecycleRegistryOwner {
 
-    //private Spinner placas;
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
-
+    BluetoothUtils bT;
     AutoCompleteTextView txtplacas;
-    private List<String> valores = new ArrayList<String>();
-
-
+    EditText txtpasajeros;
+    HashMap<String, String> rutaList = new HashMap<String, String>();
+    HashMap<String, String> contador = new HashMap<String, String>();
+    List<String> listaRutas = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_depachar_bus);
-
-
         txtplacas = (AutoCompleteTextView) findViewById(R.id.txtplaca);
-
+        txtpasajeros = findViewById(R.id.txtNumPasajeros);
 
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
 
 
         autocompletarPlacas(db,this.txtplacas);
 
-
-
     }
-
-    private void guardarDatos(TicketDatabase db){
-        new AsyncTask<Void,Void, String>(){
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                HashMap<String, String> rutaList = new HashMap<String, String>();
-                HashMap<String, String> contador = new HashMap<String, String>();
-
-                for(TicketDb item : db.ticketDao().obtenerTicketPorPlaca(txtplacas.getText().toString())){
-                    String ruta = item.getRuta().toString();
-                    String valor = item.getValor().toString();
-                    String despachado = item.getDespachado().toString();
-                    String[] split = ruta.split("-");
-                    String id = split[0];
-                    String c = "1";
-
-                    for(Ruta r: db.rutaDao().obtenerRutaPorId(id)) {
-
-
-                        String origen = r.getOrigen().toString();
-                        String destino = r.getDestino().toString();
-                        String origenDestino = origen+"-"+destino;
-
-                        try {
-                            if(rutaList.size() != 0) {
-                                if (rutaList.containsKey(origenDestino)) {
-                                    String item1 = rutaList.get(origenDestino);
-                                    float total = Float.parseFloat(item1) + Float.parseFloat(valor);
-                                    rutaList.remove(origenDestino);
-                                    rutaList.put(origenDestino, String.valueOf(total));
-
-                                    String item4 = contador.get(origenDestino);
-                                    int suma = Integer.parseInt(item4) +1;
-                                    contador.remove(origenDestino);
-                                    contador.put(origenDestino, String.valueOf(suma));
-                                } else {
-                                    rutaList.put(origenDestino, valor);
-                                    contador.put(origenDestino,String.valueOf(c));
-
-                                }
-                            }else{
-                                rutaList.put(origenDestino, valor);
-                                contador.put(origenDestino,String.valueOf(c));
-                            }
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                return null;
-            }
-        }.execute();
-
-    }
-
 
     private void autocompletarPlacas(TicketDatabase db, AutoCompleteTextView txt){
 
-        db.ticketDao().obtenerPlacasBuses("False").observe( this, (List<TicketDb> strinList) ->{
+        db.ticketDao().obtenerPlacasBuses("false").observe( this, (List<TicketDb> strinList) ->{
             List<String> placasList = new ArrayList<String>();
 
             for(TicketDb item: strinList){
@@ -130,34 +71,160 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
 
     }
 
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return mRegistry;
-    }
-
     public void click_imprimir(View view) {
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
 
         guardarDatos(db);
     }
 
-    /*private void cargarPlacas(){
-        TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
-
-        new AsyncTask<Void, Void, String>(){
-
+    private void guardarDatos(TicketDatabase db){
+        new AsyncTask<Void,Void, String>(){
             @Override
             protected String doInBackground(Void... voids) {
-                for(TicketDb item: db.ticketDao().obtenerPlacasBuses("False")){
-                    String placa = item.getPlacaBus().toString();
-                    if(valores.indexOf(placa) < 0) {
-                        valores.add(placa);
+                String despachado="";
+                List<TicketDb> tickets_cerrados = new ArrayList<>();
+                List<TicketDb> tl=   db.ticketDao().obtenerTicketPorPlaca(txtplacas.getText().toString());
+                for(TicketDb item : tl) {
+                    String ruta = item.getRuta().toString();
+                    String valor = item.getValor().toString();
+                    despachado = item.getDespachado().toString();
+                    String[] split = ruta.split("-");
+                    String id = split[0];
+                    String c = "1";
+                    String p = txtplacas.getText().toString();
+                    String a = item.getPlacaBus().toString();
+                    if (despachado.equals("false") ) {
+                        for (Ruta r : db.rutaDao().obtenerRutaPorId(id)) {
+
+                            String origen = r.getOrigen().toString();
+                            String destino = r.getDestino().toString();
+                            String origenDestino = origen + "-" + destino;
+                            try {
+                                if (rutaList.size() != 0) {
+                                    if (rutaList.containsKey(origenDestino)) {
+                                        String item1 = rutaList.get(origenDestino);
+                                        float total = Float.parseFloat(item1) + Float.parseFloat(valor);
+                                        rutaList.remove(origenDestino);
+                                        rutaList.put(origenDestino, String.valueOf(total));
+
+                                        String item4 = contador.get(origenDestino);
+                                        int suma = Integer.parseInt(item4) + 1;
+                                        contador.remove(origenDestino);
+                                        contador.put(origenDestino, String.valueOf(suma));
+                                    } else {
+                                        rutaList.put(origenDestino, valor);
+                                        contador.put(origenDestino, String.valueOf(c));
+                                        listaRutas.add(origenDestino);
+                                    }
+                                } else {
+                                    rutaList.put(origenDestino, valor);
+                                    contador.put(origenDestino, String.valueOf(c));
+                                    listaRutas.add(origenDestino);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        TicketDb ticketDb = new TicketDb(item.getUuid().toString(), item.getRuta().toString(), item.getPlacaBus().toString()
+                                , item.getValor().toString(), item.getFecha_nicial().toString(), item.getPunto_venta().toString(),
+                                item.getHora_llegada().toString(), item.getFechaViaje().toString(), item.getHora_salida().toString(),
+                                item.getSincro().toString(), item.getCierre().toString(), item.getEmpleado().toString(), item.getEmpresa().toString(),
+                                "true");
+                        tickets_cerrados.add(ticketDb);
+
+
                     }
                 }
+                if (despachado.equals("false")){
+                    imprimirCierre(rutaList,contador,listaRutas);
 
+                }
                 return null;
             }
         }.execute();
 
-    }*/
+    }
+
+
+    private void imprimirCierre(HashMap<String, String> rutaList, HashMap<String, String> contador, List<String> listaRutas) {
+        String logo_metis = "^FX Top section with company logo, name and address." +
+                "^CF0,30" +
+                "^FO10,20^GFA,1710,1710,19,,:::::::::gG07FE,Y01KF,X01FC0IF8,W01FC1IF8,Q0F8I01FC3IF8,Q07FI0FE3IFC,Q03KF3IFE,Q01OFC,Q01OF,R0NFC,R0KFE7F8,R0KF0FE,R03IF83FA,R03FFE07FC,R03DF81FFD,R033E03F7E,S07C07C,R01F81F8,R03F03C,R07E,R0DC,Q01B8,P0133,P0266,P04CE,P099C,O0139C,O01738,O02E78V01FC,J07FFI0C79JFE3KFCFF80IFC,J07FF001CF1JFE3KFCFF83JF,J07FF8038F1JFE3KFCFF87JF,J07FF8031F1JFE3KFCFF8JFE,J07FF8071F1JFE3KFCFF8JFE,J07FFC0E3F1JFE3KFCFF8JFE,J07FFC0E3F1FFK07FC00FF9FF80C,J07FFC1C3F1FFK03FC00FF9FF8,J07FFE1C7F1FF8J07FC00FF9IF8,J07FFE387F1JFC007FC00FF8JF,J07FFE387F1JFC007FC00FF8JFC,J07IF78FF1JFC007FC00FF87IFE,J07FBF70FF1JFC007FC00FF83JF,J07FBFF0FF1JFC007FC00FF81JF8,J07FBFF0FF1FF8J07FC00FF803IF8,J07F9FE1FF1FFK07FC00FF8003FF8,J07F9FE1FF1FFK07FC00FF8I0FF8,J07F8FE1FF1FFK07FC00FF8F00FF8,J07F8FE1FF1KF007FC00FF8KF8,J07F8FC1FF1KF007FC00FF9KF8,J07F87C1FF1KF007FC00FF9KF,J07F87C1FF1KF003FC00FF9KF,J07F83D1FF1KF007FC00FF9JFC,J07F83D1FF1KF003FC00FF87IF8,M03Dg01F,M01D,:M019,N09,N09J0A01K0401041,N01K04904008048204,N01N02K01442,V041K014008,S084820248448I08,,::::::::::::::::^FS" +
+                "^FO160,30^FDMetis Consultores^FS" +
+                "^CF0,25" +
+                "^FO160,65^FDMedellin^FS" +
+                "^FO160,90^FDColombia (COL)^FS" +
+                "^FO20,115^GB340,1,3^FS";
+        String datos = "^FO130,150^FDCierre de viaje^FS" +
+                "^FO20,185^GB340,1,3^FS"+
+                "^FO20,220^FDNumero de pasajeros: "+txtpasajeros.getText().toString()+"^FS";
+        int pos = 250;
+        float total=0;
+        for (String item :
+                listaRutas) {
+
+            String valor = rutaList.get(item);
+            String num = contador.get(item);
+            datos = datos +  "^FO20,"+pos+ "^FDRuta: "+item+"^FS";
+            pos = pos+30;
+            datos = datos +  "^FO20,"+pos + "^FDValor: "+valor+"^FS";
+            pos = pos+30;
+            datos = datos +  "^FO20,"+pos + "^FDCantidad: "+num+"^FS";
+            pos = pos+30;
+            total += Float.parseFloat(valor);
+        }
+        datos = datos +  "^FO20,"+pos + "^FDtotal Vendido: "+total+"^FS";
+        String tiquete_texto = "^XA^POI^L480" + logo_metis + datos +  "^FS^XZ";
+        try {
+            bT.write(tiquete_texto);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return mRegistry;
+    }
+
+    protected void onResume() {
+        try {
+            bT = new BluetoothUtils(DepacharBus.this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+
+        try{
+            bT.closeBT();
+        }catch(Exception e){
+
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        try{
+            bT.closeBT();
+        }catch(Exception e){
+
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        try{
+            bT.closeBT();
+        }catch(Exception e){
+
+        }
+        super.onDestroy();
+    }
 }

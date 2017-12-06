@@ -125,7 +125,7 @@ public class Configuracion extends AppCompatActivity {
 
 
     public void restCierre(TicketDatabase db) {
-        bT = new BluetoothUtils(Configuracion.this);
+        //bT = new BluetoothUtils(Configuracion.this);
         String empleado="";
         new AsyncTask<Void,Void,String>(){
 
@@ -172,15 +172,19 @@ public class Configuracion extends AppCompatActivity {
                 }
                 if (tdbList.size()>0){
                     ticketRepository.guardarRestcierreCaja(empleadoActial,setDate().format(Calendar.getInstance().getTime()).toString(),calendario.get(Calendar.HOUR_OF_DAY)+":"+calendario.get(Calendar.MINUTE),String.valueOf(tdbList.size()),String.valueOf(total));
-                }
-                succesCierre = ticketRepository.succesCierre;
-                if (succesCierre){
-                    imprimirCierreCaja(empleado,setDate().format(Calendar.getInstance().getTime()).toString(),calendario.get(Calendar.HOUR_OF_DAY)+":"+calendario.get(Calendar.MINUTE),String.valueOf(tdbList.size()),String.valueOf(total));
-                    for (TicketDb t :
-                            tickets_cerrados) {
-                        db.ticketDao().actualizarTiquete(t);
+                    succesCierre = ticketRepository.succesCierre;
+                    if (succesCierre){
+                        imprimirCierreCaja(empleado,setDate().format(Calendar.getInstance().getTime()).toString(),calendario.get(Calendar.HOUR_OF_DAY)+":"+calendario.get(Calendar.MINUTE),String.valueOf(tdbList.size()),String.valueOf(total));
+                        for (TicketDb t :
+                                tickets_cerrados) {
+                            db.ticketDao().actualizarTiquete(t);
+                        }
+                        succesCierre=false;
                     }
+
                 }
+
+
                 return null;
             }
         }.execute();
@@ -189,7 +193,7 @@ public class Configuracion extends AppCompatActivity {
     public void imprimirCierreCaja(String empleado, String fecha, String hora,
                                    String num_tiquetes, String total_valor_tiquetes){
         Calendar calendario = new GregorianCalendar();
-
+        //bT = new BluetoothUtils(Configuracion.this);
         String logo_metis = "^FX Top section with company logo, name and address." +
                 "^CF0,30" +
                 "^FO10,20^GFA,1710,1710,19,,:::::::::gG07FE,Y01KF,X01FC0IF8,W01FC1IF8,Q0F8I01FC3IF8,Q07FI0FE3IFC,Q03KF3IFE,Q01OFC,Q01OF,R0NFC,R0KFE7F8,R0KF0FE,R03IF83FA,R03FFE07FC,R03DF81FFD,R033E03F7E,S07C07C,R01F81F8,R03F03C,R07E,R0DC,Q01B8,P0133,P0266,P04CE,P099C,O0139C,O01738,O02E78V01FC,J07FFI0C79JFE3KFCFF80IFC,J07FF001CF1JFE3KFCFF83JF,J07FF8038F1JFE3KFCFF87JF,J07FF8031F1JFE3KFCFF8JFE,J07FF8071F1JFE3KFCFF8JFE,J07FFC0E3F1JFE3KFCFF8JFE,J07FFC0E3F1FFK07FC00FF9FF80C,J07FFC1C3F1FFK03FC00FF9FF8,J07FFE1C7F1FF8J07FC00FF9IF8,J07FFE387F1JFC007FC00FF8JF,J07FFE387F1JFC007FC00FF8JFC,J07IF78FF1JFC007FC00FF87IFE,J07FBF70FF1JFC007FC00FF83JF,J07FBFF0FF1JFC007FC00FF81JF8,J07FBFF0FF1FF8J07FC00FF803IF8,J07F9FE1FF1FFK07FC00FF8003FF8,J07F9FE1FF1FFK07FC00FF8I0FF8,J07F8FE1FF1FFK07FC00FF8F00FF8,J07F8FE1FF1KF007FC00FF8KF8,J07F8FC1FF1KF007FC00FF9KF8,J07F87C1FF1KF007FC00FF9KF,J07F87C1FF1KF003FC00FF9KF,J07F83D1FF1KF007FC00FF9JFC,J07F83D1FF1KF003FC00FF87IF8,M03Dg01F,M01D,:M019,N09,N09J0A01K0401041,N01K04904008048204,N01N02K01442,V041K014008,S084820248448I08,,::::::::::::::::^FS" +
@@ -211,13 +215,22 @@ public class Configuracion extends AppCompatActivity {
         String tiquete = "^XA^POI^LL780" + logo_metis + datos+qr+ "^XZ";
         try {
             bT.write(tiquete);
-            bT.closeBT();
+            //bT.closeBT();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
+    }
+
+    protected void onResume() {
+        try {
+            bT = new BluetoothUtils(Configuracion.this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onResume();
     }
 
     @Override

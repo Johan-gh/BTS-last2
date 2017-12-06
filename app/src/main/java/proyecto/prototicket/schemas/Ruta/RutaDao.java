@@ -33,7 +33,5 @@ public interface RutaDao {
 
     @Query("SELECT origen, destino FROM tabla_ruta WHERE id = :id")
     public List<Ruta> obtenerRutaPorId(String id);
-
-
 }
 //(origen + '/' + destino) as ruta

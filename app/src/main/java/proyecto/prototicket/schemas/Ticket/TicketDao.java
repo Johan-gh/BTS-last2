@@ -35,6 +35,6 @@ public interface TicketDao {
     @Query("SELECT placaBus FROM tabla_tiquete WHERE despachado = :despachado")
     public LiveData<List<TicketDb>> obtenerPlacasBuses(String despachado);
 
-    @Query("SELECT ruta, valor, despachado FROM tabla_tiquete WHERE placaBus =:placaBus")
+    @Query("SELECT uuid,ruta, placaBus, valor,fecha_nicial,punto_venta ,hora_llegada,fechaViaje,hora_salida,sincro,cierre,empresa,empleado, despachado FROM tabla_tiquete WHERE placaBus =:placaBus")
     public List<TicketDb> obtenerTicketPorPlaca(String placaBus);
 }
