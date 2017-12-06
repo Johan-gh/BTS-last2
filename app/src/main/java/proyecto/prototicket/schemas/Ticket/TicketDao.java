@@ -1,5 +1,6 @@
 package proyecto.prototicket.schemas.Ticket;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -32,5 +33,8 @@ public interface TicketDao {
     public List<TicketDb> obtenerTicketPorEmpleado(String empleado, String flag);
 
     @Query("SELECT placaBus FROM tabla_tiquete WHERE despachado = :despachado")
-    public List<TicketDb> obtenerPlacasBuses(String despachado);
+    public LiveData<List<TicketDb>> obtenerPlacasBuses(String despachado);
+
+    @Query("SELECT ruta, valor, despachado FROM tabla_tiquete WHERE placaBus =:placaBus")
+    public List<TicketDb> obtenerTicketPorPlaca(String placaBus);
 }

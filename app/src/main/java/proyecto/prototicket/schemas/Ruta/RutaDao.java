@@ -31,6 +31,9 @@ public interface RutaDao {
     @Query("SELECT precio_N FROM tabla_ruta WHERE origen = :origen AND destino=:destino AND empresaId = :empresaId")
     public String obtenerPrecioN(String origen, String destino, String empresaId);
 
+    @Query("SELECT origen, destino FROM tabla_ruta WHERE id = :id")
+    public List<Ruta> obtenerRutaPorId(String id);
+
 
 }
 //(origen + '/' + destino) as ruta
