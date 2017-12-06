@@ -3,11 +3,15 @@ package proyecto.prototicket;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.persistence.room.Room;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -50,6 +54,37 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.item1:
+                Intent intent = new Intent(this, CrearTicket.class);
+                startActivity(intent);
+                break;
+            case R.id.item2:
+                Intent intent1 = new Intent(this, VerificarTicket.class);
+                startActivity(intent1);
+                break;
+            case R.id.item4:
+                Intent intent2 = new Intent(this, Pre_Itinerario.class);
+                startActivity(intent2);
+                break;
+            case R.id.item3:
+                Intent intent4 = new Intent(this, Configuracion.class);
+                startActivity(intent4);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void autocompletarPlacas(TicketDatabase db, AutoCompleteTextView txt){
 
         db.ticketDao().obtenerPlacasBuses("false").observe( this, (List<TicketDb> strinList) ->{
@@ -73,8 +108,19 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
 
     public void click_imprimir(View view) {
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
+        if (txtpasajeros.getText().toString().equals("") ||
+                txtplacas.getText().toString().equals(""))
+        {
+            fastToast("Por favor ingrese todos los datos solicitados");
+        }else{
+            guardarDatos(db);
+        }
 
-        guardarDatos(db);
+    }
+
+    private void fastToast(String message){
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
     }
 
     private void guardarDatos(TicketDatabase db){
@@ -93,8 +139,9 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
                     String c = "1";
                     String p = txtplacas.getText().toString();
                     String a = item.getPlacaBus().toString();
+                    List<Ruta> rl= db.rutaDao().obtenerRutaPorId(id);
                     if (despachado.equals("false") ) {
-                        for (Ruta r : db.rutaDao().obtenerRutaPorId(id)) {
+                        for (Ruta r : rl) {
 
                             String origen = r.getOrigen().toString();
                             String destino = r.getDestino().toString();
@@ -132,7 +179,7 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
                                 item.getSincro().toString(), item.getCierre().toString(), item.getEmpleado().toString(), item.getEmpresa().toString(),
                                 "true");
                         tickets_cerrados.add(ticketDb);
-
+                        db.ticketDao().actualizarTiquete(ticketDb);
 
                     }
                 }
@@ -167,17 +214,21 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
             String valor = rutaList.get(item);
             String num = contador.get(item);
             datos = datos +  "^FO20,"+pos+ "^FDRuta: "+item+"^FS";
-            pos = pos+30;
+            pos = pos+40;
             datos = datos +  "^FO20,"+pos + "^FDValor: "+valor+"^FS";
-            pos = pos+30;
+            pos = pos+40;
             datos = datos +  "^FO20,"+pos + "^FDCantidad: "+num+"^FS";
-            pos = pos+30;
-            total += Float.parseFloat(valor);
+            pos = pos+40;
+            total += (Float.parseFloat(valor));
         }
-        datos = datos +  "^FO20,"+pos + "^FDtotal Vendido: "+total+"^FS";
-        String tiquete_texto = "^XA^POI^L480" + logo_metis + datos +  "^FS^XZ";
+        int a =(int)total;
+        String totalString=String.valueOf(a);
+        datos = datos +  "^FO20,"+pos + "^FDtotal Vendido: "+totalString+"^FS";
+        String tiquete_texto = "^XA^POI^L400" + logo_metis + datos +  "^CFZ,25^FO30,480^FDPlaca: "+txtplacas.getText().toString()+"^FS^XZ";
         try {
             bT.write(tiquete_texto);
+            Intent intent2 = new Intent(DepacharBus.this,Configuracion.class);
+            startActivity(intent2);
         } catch (IOException e) {
             e.printStackTrace();
         }

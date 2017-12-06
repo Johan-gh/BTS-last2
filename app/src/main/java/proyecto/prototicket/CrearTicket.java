@@ -158,7 +158,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                         txtOrigenDestino.getText().equals("") ||
                         txtPrecio.getText().toString().equals("") ||
                         txtPasajero.getText().toString().equals("") ||
-                        txtCedula.getText().toString().equals(""))
+                        txtCedula.getText().toString().equals("") ||
+                        txtHora.getText().toString().equals(""))
                 {
 
                     fastToast("Por favor ingrese todos los datos solicitados");
@@ -170,6 +171,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+
                 }
             }
         });
@@ -623,6 +625,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                 //bT.sendData(ticket.getDataPrint());
                 //bT = new BluetoothUtils(CrearTicket.this);
                 bT.write(tiquete_texto);
+                Intent intent2 = new Intent(CrearTicket.this,CrearTicket.class);
+                startActivity(intent2);
                 //bT.closeBT();
                 //refrescar();
             } catch (Exception e) {
