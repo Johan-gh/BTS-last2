@@ -70,6 +70,10 @@ public class BusRepository {
             String mensaje ="";
             for (int i = 0; i < jsonArray.length(); i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String placa=jsonObject.optString("placa");
+                String capacidad = jsonObject.optString("capacidad");
+                String num = jsonObject.optString("numero_bus");
+                String servicio = jsonObject.optString("tipo_servicio");
                 exec = Executors.newSingleThreadExecutor();
                 exec.execute(() -> {
 

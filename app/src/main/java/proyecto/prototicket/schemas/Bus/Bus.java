@@ -18,18 +18,18 @@ public class Bus {
 
     private String capacidad;
 
-    private String tipo_servicio;
-
     private String numero_bus;
+
+    private String tipo_servicio;
 
     private String empresaId;
 
-    public Bus(String id,String placa, String capacidad, String tipo_servicio, String numero_bus, String empresaId) {
+    public Bus(String id,String placa, String capacidad, String numero_bus,String tipo_servicio, String empresaId) {
         this.id=id;
         this.placa = placa;
         this.capacidad = capacidad;
-        this.tipo_servicio = tipo_servicio;
         this.numero_bus = numero_bus;
+        this.tipo_servicio = tipo_servicio;
         this.empresaId = empresaId;
     }
 

@@ -220,6 +220,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                     android.R.layout.simple_list_item_1,strinList);
             txt.setAdapter(adapter);
             txt.setThreshold(1);
+            
 
         });
     }
