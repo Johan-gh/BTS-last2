@@ -39,6 +39,7 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
     HashMap<String, String> rutaList = new HashMap<String, String>();
     HashMap<String, String> contador = new HashMap<String, String>();
     List<String> listaRutas = new ArrayList<>();
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -277,5 +278,23 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
 
         }
         super.onDestroy();
+    }
+
+    public void countUp(View view) {
+        if(txtpasajeros.getText().toString().equals("")){
+            txtpasajeros.setText("0");
+        }
+        count = Integer.parseInt(txtpasajeros.getText().toString()) + 1;
+        txtpasajeros.setText(Integer.toString(count));
+    }
+
+    public void countDown(View view) {
+        if(txtpasajeros.getText().toString().equals("")){
+            txtpasajeros.setText("0");
+            count = 0;
+        }else {
+            count = count > 0 ? count - 1 : count;
+            txtpasajeros.setText(Integer.toString(count));
+        }
     }
 }
