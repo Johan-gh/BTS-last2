@@ -1,7 +1,10 @@
 package proyecto.prototicket;
 
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 
 import java.io.IOException;
@@ -32,9 +36,9 @@ import proyecto.prototicket.schemas.TicketDatabase;
 public class Configuracion extends AppCompatActivity {
 
 
-    private static final String URL_BUS ="https://btsbymetis.herokuapp.com/bus/api_buses";
-    private static final String URL_PUNTO_VENTAS ="https://btsbymetis.herokuapp.com/punto_venta/api_puntoVentas";
-    private static final String URL_RUTA ="https://btsbymetis.herokuapp.com/rutas/api_rutas";
+    private static final String URL_BUS = "https://btsbymetis.herokuapp.com/bus/api_buses";
+    private static final String URL_PUNTO_VENTAS = "https://btsbymetis.herokuapp.com/punto_venta/api_puntoVentas";
+    private static final String URL_RUTA = "https://btsbymetis.herokuapp.com/rutas/api_rutas";
     private static final String URL_ITINERARIO = "https://btsbymetis.herokuapp.com/itinerario/api_itinerarios";
     private static final String URL_EMPRESA = "https://btsbymetis.herokuapp.com/usuarios/api_empresas";
     private Boolean succesCierre = false;
@@ -45,7 +49,7 @@ public class Configuracion extends AppCompatActivity {
     private ItinerarioRepository ir;
     private EmpresaRepository er;
     BluetoothUtils bT;
-    List<TicketDb> tdbList ;
+    List<TicketDb> tdbList;
 
 
     @Override
@@ -68,7 +72,7 @@ public class Configuracion extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.item1:
                 Intent intent = new Intent(this, CrearTicket.class);
                 startActivity(intent);
@@ -86,34 +90,43 @@ public class Configuracion extends AppCompatActivity {
     }
 
     public void click_sincronizar(View view) {
-        br = new BusRepository();
-        pvr = new PuntoVentaRepository();
-        rr = new RutaRepository();
-        ir = new ItinerarioRepository();
-        er = new EmpresaRepository();
+        if(isNetDisponible()) {
+            br = new BusRepository();
+            pvr = new PuntoVentaRepository();
+            rr = new RutaRepository();
+            ir = new ItinerarioRepository();
+            er = new EmpresaRepository();
 
-        TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
-        br.getBuses(URL_BUS,db);
-        pvr.getPuntoVentas(URL_PUNTO_VENTAS,db);
-        rr.getRuta(URL_RUTA,db);
-        ir.getItinerario(URL_ITINERARIO, db);
-        er.getEmpresa(URL_EMPRESA, db);
+            TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
+            br.getBuses(URL_BUS, db);
+            pvr.getPuntoVentas(URL_PUNTO_VENTAS, db);
+            rr.getRuta(URL_RUTA, db);
+            ir.getItinerario(URL_ITINERARIO, db);
+            er.getEmpresa(URL_EMPRESA, db);
+        }else{
+            Toast.makeText(this,"No hay conexión a internet", Toast.LENGTH_LONG).show();
+        }
     }
 
 
     public void click_sync_tiquetes(View view) {
-        TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
-        ticketRepository = new TicketRepository();
-        ticketRepository.restTiquete(db);
+        if(isNetDisponible()) {
+            TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
+            ticketRepository = new TicketRepository();
+            ticketRepository.restTiquete(db);
+        }
+        else{
+            Toast.makeText(this,"No hay conexión a internet", Toast.LENGTH_LONG).show();
+        }
     }
 
-    public void click_cierre(View view){
+    public void click_cierre(View view) {
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
         ticketRepository = new TicketRepository();
         restCierre(db);
     }
 
-    public void click_despacharBus(View view){
+    public void click_despacharBus(View view) {
 
         Intent intent = new Intent(Configuracion.this, DepacharBus.class);
         startActivity(intent);
@@ -126,18 +139,18 @@ public class Configuracion extends AppCompatActivity {
 
     public void restCierre(TicketDatabase db) {
         //bT = new BluetoothUtils(Configuracion.this);
-        String empleado="";
-        new AsyncTask<Void,Void,String>(){
+        String empleado = "";
+        new AsyncTask<Void, Void, String>() {
 
             @Override
             protected String doInBackground(Void... voids) {
                 float total = 0;
                 Calendar calendario = new GregorianCalendar();
                 String empleadoActial = "";
-                tdbList = db.ticketDao().obtenerTicketPorEmpleado("7","False");
+                tdbList = db.ticketDao().obtenerTicketPorEmpleado("7", "False");
                 List<TicketDb> tickets_cerrados = new ArrayList<>();
-                for (TicketDb tdb:tdbList) {
-                    if(tdb.getCierre().toString().equals("False")) {
+                for (TicketDb tdb : tdbList) {
+                    if (tdb.getCierre().toString().equals("False")) {
                         String uuid = tdb.getUuid().toString();
                         String rutaStr = tdb.getRuta().toString();
                         String placaBus = tdb.getPlacaBus().toString();
@@ -153,16 +166,16 @@ public class Configuracion extends AppCompatActivity {
                         String sincro = tdb.getSincro().toString();
                         String cierre = tdb.getCierre().toString();
                         String empleado = tdb.getEmpleado().toString();
-                        empleadoActial=empleado;
+                        empleadoActial = empleado;
                         String empresa = tdb.getEmpresa().toString();
                         String despachado = tdb.getDespachado().toString();
 
                         //lista.add(uuid +"-"+ruta+"-"+valor+"-"+fecha_inicial+"-"+ punto_venta+"-"+hora_salida+"-"+hora_llegada+"-"+fecha_viaje+"-"+sincro+"-"+cierre+"-"+empleado+"-"+empresa);
                         TicketDb ticketDb3 = new TicketDb(uuid, String.valueOf(ruta), placaBus, String.valueOf(valor), fecha_inicial, String.valueOf(punto_venta)
-                                , hora_salida, hora_llegada, fecha_viaje, sincro, "True", empleado, empresa,despachado);
+                                , hora_salida, hora_llegada, fecha_viaje, sincro, "True", empleado, empresa, despachado);
 
-                        TicketDb ticketDb = new TicketDb(uuid,String.valueOf(ruta), placaBus, String.valueOf(valor),fecha_inicial,String.valueOf(punto_venta),hora_llegada,fecha_viaje,
-                                hora_salida,sincro,"True",empleado,empresa, despachado);
+                        TicketDb ticketDb = new TicketDb(uuid, String.valueOf(ruta), placaBus, String.valueOf(valor), fecha_inicial, String.valueOf(punto_venta), hora_llegada, fecha_viaje,
+                                hora_salida, sincro, "True", empleado, empresa, despachado);
 
                         tickets_cerrados.add(ticketDb);
                         //db.ticketDao().actualizarTiquete(ticketDb);
@@ -170,16 +183,16 @@ public class Configuracion extends AppCompatActivity {
 
                     }
                 }
-                if (tdbList.size()>0){
-                    ticketRepository.guardarRestcierreCaja(empleadoActial,setDate().format(Calendar.getInstance().getTime()).toString(),calendario.get(Calendar.HOUR_OF_DAY)+":"+calendario.get(Calendar.MINUTE),String.valueOf(tdbList.size()),String.valueOf(total));
+                if (tdbList.size() > 0) {
+                    ticketRepository.guardarRestcierreCaja(empleadoActial, setDate().format(Calendar.getInstance().getTime()).toString(), calendario.get(Calendar.HOUR_OF_DAY) + ":" + calendario.get(Calendar.MINUTE), String.valueOf(tdbList.size()), String.valueOf(total));
                     succesCierre = ticketRepository.succesCierre;
-                    if (succesCierre){
-                        imprimirCierreCaja(empleado,setDate().format(Calendar.getInstance().getTime()).toString(),calendario.get(Calendar.HOUR_OF_DAY)+":"+calendario.get(Calendar.MINUTE),String.valueOf(tdbList.size()),String.valueOf(total));
+                    if (succesCierre) {
+                        imprimirCierreCaja(empleado, setDate().format(Calendar.getInstance().getTime()).toString(), calendario.get(Calendar.HOUR_OF_DAY) + ":" + calendario.get(Calendar.MINUTE), String.valueOf(tdbList.size()), String.valueOf(total));
                         for (TicketDb t :
                                 tickets_cerrados) {
                             db.ticketDao().actualizarTiquete(t);
                         }
-                        succesCierre=false;
+                        succesCierre = false;
                     }
 
                 }
@@ -191,7 +204,7 @@ public class Configuracion extends AppCompatActivity {
     }
 
     public void imprimirCierreCaja(String empleado, String fecha, String hora,
-                                   String num_tiquetes, String total_valor_tiquetes){
+                                   String num_tiquetes, String total_valor_tiquetes) {
         Calendar calendario = new GregorianCalendar();
         //bT = new BluetoothUtils(Configuracion.this);
         String logo_metis = "^FX Top section with company logo, name and address." +
@@ -204,15 +217,15 @@ public class Configuracion extends AppCompatActivity {
                 "^FO20,115^GB340,1,3^FS";
         String datos = "^FO140,150^FDCierre de Caja^FS" +
                 "^FO20,185^GB340,1,3^FS" +
-                "^FO20,220^FDFecha:"+ setDate().format(Calendar.getInstance().getTime()).toString()+ "^FS" +
-                "^FO20,250^FDHora: "+ calendario.get(Calendar.HOUR_OF_DAY)+":"+calendario.get(Calendar.MINUTE) +"^FS" +
-                "^FO20,280^FDNumero de tiquetes: " + num_tiquetes +"^FS" +
-                "^FO20,310^FDValor total: "+ total_valor_tiquetes + "^FS" +
-                "^FO20,360^FDElaborado por: "+ empleado+"^FS";
-        String qr = "^FO40,400^BQN,2,8^FD__"+setDate().format(Calendar.getInstance().getTime()).toString()+
-                "_"+calendario.get(Calendar.HOUR_OF_DAY)+":"+num_tiquetes+"_"+total_valor_tiquetes
-                +"_"+empleado+"^FS";
-        String tiquete = "^XA^POI^LL780" + logo_metis + datos+qr+ "^XZ";
+                "^FO20,220^FDFecha:" + setDate().format(Calendar.getInstance().getTime()).toString() + "^FS" +
+                "^FO20,250^FDHora: " + calendario.get(Calendar.HOUR_OF_DAY) + ":" + calendario.get(Calendar.MINUTE) + "^FS" +
+                "^FO20,280^FDNumero de tiquetes: " + num_tiquetes + "^FS" +
+                "^FO20,310^FDValor total: " + total_valor_tiquetes + "^FS" +
+                "^FO20,360^FDElaborado por: " + empleado + "^FS";
+        String qr = "^FO40,400^BQN,2,8^FD__" + setDate().format(Calendar.getInstance().getTime()).toString() +
+                "_" + calendario.get(Calendar.HOUR_OF_DAY) + ":" + num_tiquetes + "_" + total_valor_tiquetes
+                + "_" + empleado + "^FS";
+        String tiquete = "^XA^POI^LL780" + logo_metis + datos + qr + "^XZ";
         try {
             bT.write(tiquete);
             //bT.closeBT();
@@ -236,9 +249,9 @@ public class Configuracion extends AppCompatActivity {
     @Override
     protected void onPause() {
 
-        try{
+        try {
             bT.closeBT();
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
         super.onPause();
@@ -246,9 +259,9 @@ public class Configuracion extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        try{
+        try {
             bT.closeBT();
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
         super.onStop();
@@ -256,12 +269,22 @@ public class Configuracion extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        try{
+        try {
             bT.closeBT();
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
         super.onDestroy();
     }
 
-   }
+    private boolean isNetDisponible() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
+    }
+
+}
