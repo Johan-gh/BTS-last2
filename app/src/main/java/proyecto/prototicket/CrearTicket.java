@@ -618,13 +618,14 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
 
 
-            db.ticketDao().crearTicket(ticketDb);
+
 
 
             try {
                 //bT.sendData(ticket.getDataPrint());
                 //bT = new BluetoothUtils(CrearTicket.this);
                 bT.write(tiquete_texto);
+                db.ticketDao().crearTicket(ticketDb);
                 Intent intent2 = new Intent(CrearTicket.this,CrearTicket.class);
                 startActivity(intent2);
                 //bT.closeBT();
