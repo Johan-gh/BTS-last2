@@ -570,8 +570,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             ticket.setRh(txtRH.getText().toString());
             ticket.setPrecio(txtPrecio.getText().toString());*/
 
-            MainActivity m = new MainActivity();
-            String usuario = m.usuario.toString();
+            //MainActivity m = new MainActivity();
+            //String usuario = m.usuario.toString();
             String ruta2 = txtOrigenDestino.getText().toString();
             String rutaIdStr = rutaId.get(txtOrigenDestino.getText().toString());
             String[] rutaSplit = ruta2.split("-");
@@ -618,14 +618,13 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
 
 
-
+            db.ticketDao().crearTicket(ticketDb);
 
 
             try {
                 //bT.sendData(ticket.getDataPrint());
                 //bT = new BluetoothUtils(CrearTicket.this);
                 bT.write(tiquete_texto);
-                db.ticketDao().crearTicket(ticketDb);
                 Intent intent2 = new Intent(CrearTicket.this,CrearTicket.class);
                 startActivity(intent2);
                 //bT.closeBT();

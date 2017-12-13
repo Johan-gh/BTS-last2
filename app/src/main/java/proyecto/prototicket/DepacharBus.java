@@ -225,9 +225,7 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
         int a =(int)total;
         String totalString=String.valueOf(a);
         datos = datos +  "^FO20,"+pos + "^FDtotal Vendido: "+totalString+"^FS";
-        int posPlaca = pos+60;
-        int posfinal =pos + 100;
-        String tiquete_texto = "^XA^POI^L"+ posfinal + logo_metis + datos +  "^CFZ,25^FO30,"+ posPlaca +"^FDPlaca: "+txtplacas.getText().toString()+"^FS^XZ";
+        String tiquete_texto = "^XA^POI^L400" + logo_metis + datos +  "^CFZ,25^FO30,480^FDPlaca: "+txtplacas.getText().toString()+"^FS^XZ";
         try {
             bT.write(tiquete_texto);
             Intent intent2 = new Intent(DepacharBus.this,Configuracion.class);
