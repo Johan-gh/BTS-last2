@@ -18,7 +18,7 @@ public interface EmpleadoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void crearEmpleado(Empleado empleado);
 
-    @Query("SELECT * FROM tabla_empleado WHERE usuario= :usuario AND clave= :clave")
-    public LiveData<List<Empleado>> verificarUsuario(String usuario, String clave);
+    @Query("SELECT usuario, clave FROM tabla_empleado WHERE usuario= :usuario")
+    public List<Empleado> verificarUsuario(String usuario);
 
 }

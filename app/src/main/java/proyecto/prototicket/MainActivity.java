@@ -1,9 +1,11 @@
 package proyecto.prototicket;
 
 import android.Manifest;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,13 +20,18 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import java.io.IOException;
 
 import proyecto.prototicket.Utils.BluetoothUtils;
+import proyecto.prototicket.schemas.Empleado.Empleado;
+import proyecto.prototicket.schemas.Empleado.EmpleadoRepository;
+import proyecto.prototicket.schemas.TicketDatabase;
 
 public class MainActivity extends AppCompatActivity {
+
 
     private EditText txtUser;
     private EditText txtPassword;
 
-    public static String usuario;
+    private EmpleadoRepository er;
+
     BluetoothUtils bT;
 
     @Override
@@ -43,29 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                validarIniciarSession();
-
+                validarIniciarSession(txtUser.getText().toString(),txtPassword.getText().toString());
             }
         });
     }
 
-    private void validarIniciarSession() {
-        String user = txtUser.getText().toString();
-        String password = txtPassword.getText().toString();
-        if (user == null || user.equalsIgnoreCase("")) {
-            Toast.makeText(this, "Debe ingresar un usuario", Toast.LENGTH_LONG).show();
-        } else if (password == null || password.equalsIgnoreCase("")) {
-            Toast.makeText(this, "Debe ingresar una clave", Toast.LENGTH_LONG).show();
-        } else if (password.equals("1234") && user.equals("edison")) {
-            usuario = user;
-            Intent intent = new Intent(this, CrearTicket.class);
-            startActivity(intent);
-            Toast.makeText(this, "inicio sesión", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "El usuario y la contraseña no son validos", Toast.LENGTH_LONG).show();
-            txtUser.setText("");
-            txtPassword.setText("");
-        }
+    private void validarIniciarSession(String user, String password) {
+        Intent intent = new Intent(this, CrearTicket.class);
+        startActivity(intent);
+        //EmpleadoRepository empleadoRepository = new EmpleadoRepository();
+        //empleadoRepository.validarLogin(user,password);
     }
 
     @Override

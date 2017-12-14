@@ -7,8 +7,11 @@ import android.app.TimePickerDialog;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -17,6 +20,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,12 +62,13 @@ import proyecto.prototicket.schemas.Bus.Bus;
 import proyecto.prototicket.schemas.PuntoVenta.PuntoVenta;
 import proyecto.prototicket.schemas.Ruta.Ruta;
 import proyecto.prototicket.schemas.Ticket.TicketDb;
+import proyecto.prototicket.schemas.Ticket.TicketRepository;
 import proyecto.prototicket.schemas.TicketDatabase;
 
 import static proyecto.prototicket.Utils.ClassCompression.encode;
 
 
-public class CrearTicket extends AppCompatActivity implements View.OnClickListener,LifecycleRegistryOwner, View.OnTouchListener  {
+public class CrearTicket extends AppCompatActivity implements View.OnClickListener,LifecycleRegistryOwner, View.OnTouchListener {
     private final String clave = "eKNuL3ipnlLAzfxTstV7CM4vIZybztLcZ4ItqPZ9";
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
     private EditText txtFecha, txtHora, txtCedula, txtPasajero, txtRH, txtTravelRoute, txtPosting;
@@ -71,6 +77,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
     AutoCompleteTextView txtOrigenDestino;
     List<TicketDb> tdbList ;
 
+    private TicketRepository ticketRepository;
     private String precio;
 
     private String variables;
@@ -109,6 +116,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         txtPuntoVenta = (AutoCompleteTextView) findViewById(R.id.txtPosting);
         txtVehicle = (AutoCompleteTextView) findViewById(R.id.txtVehicle);
         txtPrecio = (EditText) findViewById(R.id.txtPrecio);
+
 
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
 
@@ -584,8 +592,25 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             String hora_salida = txtHora.getText().toString();
             String placaBus = txtVehicle.getText().toString();
             uuid= UUID.randomUUID();
-            TicketDb ticketDb = new TicketDb(uuid.toString(),rutaIdStr, placaBus,precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "False","False","7","5","false" );
-            ticketDb.signTicket(clave);
+
+            TicketDb ticketDb;
+            if(isNetDisponible()) {
+
+                ticketDb = new TicketDb(uuid.toString(),rutaIdStr, placaBus,precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "True","False","7","5","false" );
+
+                String[] r = rutaIdStr.split("-");
+                int idRuta = Integer.parseInt(r[0]);
+                TicketDatabase tdb = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
+                ticketRepository = new TicketRepository();
+                ticketRepository.guardarTiquete(uuid.toString(),idRuta,placaBus,Float.parseFloat(precio),fecha_inicio,Integer.parseInt(pvId),hora_salida,"10:59",fecha_viaje,"False","False","7","5","false",tdb);
+                ticketDb.signTicket(clave);
+            }
+            else{
+                ticketDb = new TicketDb(uuid.toString(),rutaIdStr, placaBus,precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "False","False","7","5","false" );
+                ticketDb.signTicket(clave);
+            }
+
+
         String logo_metis = "^FX Top section with company logo, name and address." +
                 "^CF0,30" +
                 "^FO10,20^GFA,1710,1710,19,,:::::::::gG07FE,Y01KF,X01FC0IF8,W01FC1IF8,Q0F8I01FC3IF8,Q07FI0FE3IFC,Q03KF3IFE,Q01OFC,Q01OF,R0NFC,R0KFE7F8,R0KF0FE,R03IF83FA,R03FFE07FC,R03DF81FFD,R033E03F7E,S07C07C,R01F81F8,R03F03C,R07E,R0DC,Q01B8,P0133,P0266,P04CE,P099C,O0139C,O01738,O02E78V01FC,J07FFI0C79JFE3KFCFF80IFC,J07FF001CF1JFE3KFCFF83JF,J07FF8038F1JFE3KFCFF87JF,J07FF8031F1JFE3KFCFF8JFE,J07FF8071F1JFE3KFCFF8JFE,J07FFC0E3F1JFE3KFCFF8JFE,J07FFC0E3F1FFK07FC00FF9FF80C,J07FFC1C3F1FFK03FC00FF9FF8,J07FFE1C7F1FF8J07FC00FF9IF8,J07FFE387F1JFC007FC00FF8JF,J07FFE387F1JFC007FC00FF8JFC,J07IF78FF1JFC007FC00FF87IFE,J07FBF70FF1JFC007FC00FF83JF,J07FBFF0FF1JFC007FC00FF81JF8,J07FBFF0FF1FF8J07FC00FF803IF8,J07F9FE1FF1FFK07FC00FF8003FF8,J07F9FE1FF1FFK07FC00FF8I0FF8,J07F8FE1FF1FFK07FC00FF8F00FF8,J07F8FE1FF1KF007FC00FF8KF8,J07F8FC1FF1KF007FC00FF9KF8,J07F87C1FF1KF007FC00FF9KF,J07F87C1FF1KF003FC00FF9KF,J07F83D1FF1KF007FC00FF9JFC,J07F83D1FF1KF003FC00FF87IF8,M03Dg01F,M01D,:M019,N09,N09J0A01K0401041,N01K04904008048204,N01N02K01442,V041K014008,S084820248448I08,,::::::::::::::::^FS" +
@@ -615,16 +640,12 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             String qr = "^FO20,410^BQN,2,6^FD__"+ encode(ticketDb) + "^FS";
             String tiquete_texto = "^XA^POI^LL980" +qr+ logo_metis + texto +  "^CFZ,35^FO30,800^FDFELIZ VIAJE!^FS^XZ";
 
-
-
-
-            db.ticketDao().crearTicket(ticketDb);
-
-
             try {
                 //bT.sendData(ticket.getDataPrint());
                 //bT = new BluetoothUtils(CrearTicket.this);
                 bT.write(tiquete_texto);
+                db.ticketDao().crearTicket(ticketDb);
+
                 Intent intent2 = new Intent(CrearTicket.this,CrearTicket.class);
                 startActivity(intent2);
                 //bT.closeBT();
@@ -752,6 +773,16 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         }
 
         return true;
+    }
+
+    private boolean isNetDisponible() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
     }
 
 

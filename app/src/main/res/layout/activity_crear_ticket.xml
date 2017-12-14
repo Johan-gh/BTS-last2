@@ -31,20 +31,7 @@
         android:layout_height="wrap_content">
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnCodigoCedula"
-                android:layout_alignParentEnd="true"
-                android:src="@android:drawable/ic_menu_camera"
-                android:background="@android:color/transparent"
-                android:layout_alignParentRight="true"/>
-
-        </RelativeLayout>
 
 
     </LinearLayout>
@@ -154,11 +141,27 @@
             android:text="@string/traveler"/>
 
         <EditText
-            android:layout_width="match_parent"
+            android:id="@+id/txtTraveler"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:text=""
-            android:id="@+id/txtTraveler"/>
+            android:text="" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnCodigoCedula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_menu_camera" />
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 

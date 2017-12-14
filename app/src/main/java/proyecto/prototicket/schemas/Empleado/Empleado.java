@@ -5,13 +5,33 @@ package proyecto.prototicket.schemas.Empleado;
  */
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "tabla_empleado")
 public class Empleado {
 
-    private String nombre;
-    private String Usuario;
-    private String cedula;
+    @PrimaryKey
+    private String usuario;
     private String clave;
-    private String permiso;
+
+    public Empleado(String usuario, String clave) {
+        this.usuario = usuario;
+        this.clave = clave;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        usuario = usuario;
+    }
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
 }

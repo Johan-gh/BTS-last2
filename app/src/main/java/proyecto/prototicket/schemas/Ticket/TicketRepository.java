@@ -126,7 +126,7 @@ public class TicketRepository {
 
 
 
-    private String guardarTiquete(String uuid,int ruta, String placaBus, float valor, String fecha_inicial,
+    public String guardarTiquete(String uuid,int ruta, String placaBus, float valor, String fecha_inicial,
                                   int punto_venta, String hora_salida, String hora_llegada,
                                   String fecha_viaje, String sincro, String cierre, String empleado, String empresa, String despachado, TicketDatabase db) { //parametros del tiquete (Int,Float,String,int,String,String,String)
 
