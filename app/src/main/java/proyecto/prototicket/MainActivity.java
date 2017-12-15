@@ -15,17 +15,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.Constraint;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.RetryStrategy;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.io.IOException;
 
 import proyecto.prototicket.Utils.BluetoothUtils;
+import proyecto.prototicket.Utils.MyJobService;
 import proyecto.prototicket.schemas.Empleado.Empleado;
 import proyecto.prototicket.schemas.Empleado.EmpleadoRepository;
 import proyecto.prototicket.schemas.TicketDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    private static final String jogTag = "my_job_tag";
+    private FirebaseJobDispatcher jobDispatcher;
 
     private EditText txtUser;
     private EditText txtPassword;
@@ -39,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initObject();
+
+        jobDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
     }
 
 
@@ -50,6 +63,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                Job job = jobDispatcher.newJobBuilder().
+                        setService(MyJobService.class).
+                        setLifetime(Lifetime.FOREVER).
+                        setRecurring(true).
+                        setTag(jogTag).
+                        setTrigger(Trigger.executionWindow(10,15)).
+                        setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL).
+                        setReplaceCurrent(false).
+                        setConstraints(Constraint.ON_ANY_NETWORK).
+                        build();
+                jobDispatcher.schedule(job);
                 validarIniciarSession(txtUser.getText().toString(),txtPassword.getText().toString());
             }
         });

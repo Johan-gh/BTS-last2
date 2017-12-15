@@ -566,7 +566,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void imprimir(TicketDatabase db) throws IOException, NoSuchAlgorithmException {
-            /*Ticket ticket = new Ticket();
+
+        /*Ticket ticket = new Ticket();
             ticket.setBuyDate(txtDateBuy.getText().toString());
             ticket.setTravelDate(txtFecha.getText().toString());
             ticket.setTravelHour(txtHora.getText().toString());
@@ -578,37 +579,26 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
             ticket.setRh(txtRH.getText().toString());
             ticket.setPrecio(txtPrecio.getText().toString());*/
 
-            //MainActivity m = new MainActivity();
-            //String usuario = m.usuario.toString();
-            String ruta2 = txtOrigenDestino.getText().toString();
-            String rutaIdStr = rutaId.get(txtOrigenDestino.getText().toString());
-            String[] rutaSplit = ruta2.split("-");
-            String origen = rutaSplit[0];
-            String destino = rutaSplit[1];
-            String pvId = puntoVentaId.get(txtPuntoVenta.getText().toString());
-            String precio = txtPrecio.getText().toString();
-            String fecha_inicio = setDate().format(Calendar.getInstance().getTime()).toString();
-            String fecha_viaje = txtFecha.getText().toString();
-            String hora_salida = txtHora.getText().toString();
-            String placaBus = txtVehicle.getText().toString();
-            uuid= UUID.randomUUID();
+        //MainActivity m = new MainActivity();
+        //String usuario = m.usuario.toString();
+        String ruta2 = txtOrigenDestino.getText().toString();
+        String rutaIdStr = rutaId.get(txtOrigenDestino.getText().toString());
+        String[] rutaSplit = ruta2.split("-");
+        String origen = rutaSplit[0];
+        String destino = rutaSplit[1];
+        String pvId = puntoVentaId.get(txtPuntoVenta.getText().toString());
+        String precio = txtPrecio.getText().toString();
+        String fecha_inicio = setDate().format(Calendar.getInstance().getTime()).toString();
+        String fecha_viaje = txtFecha.getText().toString();
+        String hora_salida = txtHora.getText().toString();
+        String placaBus = txtVehicle.getText().toString();
+        uuid= UUID.randomUUID();
 
-            TicketDb ticketDb;
-            if(isNetDisponible()) {
+        TicketDb ticketDb;
 
-                ticketDb = new TicketDb(uuid.toString(),rutaIdStr, placaBus,precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "True","False","7","5","false" );
 
-                String[] r = rutaIdStr.split("-");
-                int idRuta = Integer.parseInt(r[0]);
-                TicketDatabase tdb = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
-                ticketRepository = new TicketRepository();
-                ticketRepository.guardarTiquete(uuid.toString(),idRuta,placaBus,Float.parseFloat(precio),fecha_inicio,Integer.parseInt(pvId),hora_salida,"10:59",fecha_viaje,"False","False","7","5","false",tdb);
-                ticketDb.signTicket(clave);
-            }
-            else{
-                ticketDb = new TicketDb(uuid.toString(),rutaIdStr, placaBus,precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "False","False","7","5","false" );
-                ticketDb.signTicket(clave);
-            }
+        ticketDb = new TicketDb(uuid.toString(),rutaIdStr, placaBus,precio, fecha_inicio, pvId, "10:59",fecha_viaje, hora_salida, "False","False","7","5","false" );
+        ticketDb.signTicket(clave);
 
 
         String logo_metis = "^FX Top section with company logo, name and address." +
@@ -774,17 +764,6 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
         return true;
     }
-
-    private boolean isNetDisponible() {
-
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
-
-        return (actNetInfo != null && actNetInfo.isConnected());
-    }
-
 
 }
 
