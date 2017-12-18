@@ -16,7 +16,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="edison"
+        android:text=""
         android:hint="Usuario"
         android:gravity="center"
         android:id="@+id/txtUser"/>
@@ -25,7 +25,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:text="1234"
+        android:text=""
         android:hint="Contraseña"
         android:gravity="center"
         android:id="@+id/txtPassword"/>

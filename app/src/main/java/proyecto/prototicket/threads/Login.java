@@ -1,36 +1,41 @@
-package proyecto.prototicket.schemas.Empleado;
+package proyecto.prototicket.threads;
 
-import android.os.StrictMode;
+import android.os.Handler;
+import android.os.Message;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import proyecto.prototicket.schemas.TicketDatabase;
+import proyecto.prototicket.MainActivity;
 
 /**
- * Created by edison on 23/11/17.
+ * Created by edison on 18/12/17.
  */
 
-public class EmpleadoRepository {
+public class Login extends Thread {
 
+    private Handler handler;
+    private MainActivity main;
+    private String usuario;
+    private String clave;
 
-    /*private static final String AUTH_TOKEN_URL ="https://btsbymetis.herokuapp.com/api_auth/login/";
+    public Login(MainActivity mainActivity, Handler handlerClass, String usuario, String clave){
+        this.main = mainActivity;
+        this.handler = handlerClass;
+        this.usuario = usuario;
+        this.clave = clave;
+    }
+
+    private static final String AUTH_TOKEN_URL ="https://btsbymetis.herokuapp.com/api_auth/token/";
 
     private Boolean success = false;
     public static JSONObject getDataUser(String usuario,String clave){
@@ -45,62 +50,41 @@ public class EmpleadoRepository {
             ex.getStackTrace();
         }
         return null;
-    }*/
-
-//    public void getEmpleado(String URLRest, TicketDatabase db){
-//
-//        Executor exec=null;
-//        String sql = URLRest;
-//        StrictMode.ThreadPolicy policy= new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
-//
-//        URL url = null;
-//
-//        HttpsURLConnection conn;
-//
-//
-//        try{
-//            url = new URL(sql);
-//            conn = (HttpsURLConnection) url.openConnection();
-//
-//            conn.setRequestMethod("GET");
-//            conn.connect();
-//
-//            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//            String inputLine;
-//            StringBuffer response = new StringBuffer();
-//            String json = "";
-//
-//            while ((inputLine = in.readLine()) != null){
-//                response.append(inputLine);
-//            }
-//
-//            json = response.toString();
-//
-//            JSONArray jsonArray = null;
-//            jsonArray = new JSONArray(json);
-//            String mensaje ="";
-//            for (int i = 0; i < jsonArray.length(); i++){
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                exec = Executors.newSingleThreadExecutor();
-//                exec.execute(() -> {
-//                    db.empleadoDao().crearEmpleado(new Empleado(jsonObject.optString("usuario"),jsonObject.optString("password")));
-//                });
-//            }
-//        }catch (MalformedURLException e){
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    }
 
 
-   /* public String validarLogin(String usuario, String clave) { //parametros del tiquete (Int,Float,String,int,String,String,String)
+    @Override
+    public void run(){
+        try {
+            // obtengo el mensaje y lo envio
+            Message msg = handler.obtainMessage();
+
+            String response = validarLogin();
+
+
+            if(response.equals("")){
+                msg.arg1 = 0;
+                msg.obj = "Usuario no valido";
+            }else{
+                msg.arg1 = 1;
+                msg.obj = response;
+            }
+
+
+            handler.sendMessage(msg); // envio el mensaje al hilo principal
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private String validarLogin(){
+
         String mesaje = "";
+
+
         JSONObject login = getDataUser(usuario, clave);
-            *//*JSONObject login = parser.getLoginObject(username,password);*//*
+            /*JSONObject login = parser.getLoginObject(username,password);*/
         String message = login.toString();
         InputStream is = null;
         // Only display the first 500 characters of the retrieved
@@ -163,6 +147,5 @@ public class EmpleadoRepository {
         char[] buffer = new char[len];
         reader.read(buffer);
         return new String(buffer);
-    }*/
-
+    }
 }
