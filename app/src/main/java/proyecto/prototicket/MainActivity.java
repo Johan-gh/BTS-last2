@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -37,7 +39,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -134,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
 
             if (msg.arg1 == 1) {
                 if(crearEmpleado((String)msg.obj)){
-                    traerem(Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build());
                     progress.dismiss();
                     startActivity(new Intent(MainActivity.this, CrearTicket.class));
                 }else{
@@ -143,8 +147,21 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             } else {
-                MainActivity.this.mensaje = (String) msg.obj;
-                showDialog(msg.arg1);
+                if(isNetDisponible()) {
+                    MainActivity.this.mensaje = (String) msg.obj;
+                    showDialog(msg.arg1);
+                }else{
+                    Boolean existe = traerem(Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build());
+                    String s = "";
+                    if(existe){
+                        progress.dismiss();
+                        startActivity(new Intent(MainActivity.this, CrearTicket.class));
+                    }
+                    else{
+                        MainActivity.this.mensaje = "No fue posibe iniciar Session";
+                        showDialog(2);
+                    }
+                }
 
             }
             if(progress.isShowing()){
@@ -154,24 +171,37 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void traerem(TicketDatabase db){
-        new AsyncTask<Void, Void, Boolean>() {
+    public boolean traerem(TicketDatabase db){
+        final boolean[] existe = {false};
+        new AsyncTask<Void, Void, String>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            protected Boolean doInBackground(Void... voids) {
+            protected String doInBackground(Void... voids) {
                 String usu = txtUser.getText().toString();
+                String clav = txtPassword.getText().toString();
 
-                for (Empleado item : db.empleadoDao().verificarUsuario(usu)) {
-                    String usuario = item.getUsuario().toString();
-                    String clave = item.getClave().toString();
-                    String t = "";
+                if (db.empleadoDao().verificarUsuario(usu).size() > 0) {
+
+                    for (Empleado item : db.empleadoDao().verificarUsuario(usu)) {
+                        String clave = item.getClave().toString();
+                        String[] split = clave.split(":");
+                        String salt = split[1];
+
+                        String secondaryHash = item.getSecondary_Hash(usu, clav, salt);
+                        String f = "";
+
+                        if (secondaryHash.equals(clave)) {
+                            existe[0] = true;
+                            break;
+                        }
+                    }
                 }
 
-                return true;
+                return null;
             }
         }.execute();
 
-
+        return existe[0];
     }
 
     private Boolean crearEmpleado(String data){
@@ -179,14 +209,16 @@ public class MainActivity extends AppCompatActivity {
         Executor exec=null;
         final boolean[] entro = {false};
         try {
-            String json = data.toString();
-            JSONArray jsonArray = null;
-            //jsonArray = new JSONArray(json);
-
-
+                JSONObject datos = new JSONObject(data);
+                String secondaryHash = datos.getString("secondary_hash");
+                String cedula = datos.getString("cedula");
+                String empresa = datos.getString("empresa");
+                String token = datos.getString("token");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String loginInternet = simpleDateFormat.format(Calendar.getInstance().getTime()).toString();
                 exec = Executors.newSingleThreadExecutor();
                 exec.execute(() -> {
-                    db.empleadoDao().crearEmpleado(new Empleado(txtUser.getText().toString(),"secondary_hash","cedula","empresa","token"));
+                    db.empleadoDao().crearEmpleado(new Empleado(txtUser.getText().toString(),secondaryHash,cedula,empresa,token, loginInternet));
                     entro[0] = true;
                 });
 
@@ -206,10 +238,18 @@ public class MainActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                                 int which) {
-
                             }
-                        }).create();
+                }).create();
+    }
 
+    private boolean isNetDisponible() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo actNetInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (actNetInfo != null && actNetInfo.isConnected());
     }
 
 }

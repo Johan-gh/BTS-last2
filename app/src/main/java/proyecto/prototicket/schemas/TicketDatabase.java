@@ -23,7 +23,7 @@ import proyecto.prototicket.schemas.Ticket.TicketDb;
  * Created by User on 11/20/2017.
  */
 
-@Database(entities = {Bus.class,PuntoVenta.class,Ruta.class, TicketDb.class, Itinerario.class, Empresa.class, Empleado.class}, version = 31,exportSchema = false)
+@Database(entities = {Bus.class,PuntoVenta.class,Ruta.class, TicketDb.class, Itinerario.class, Empresa.class, Empleado.class}, version = 32,exportSchema = false)
 public abstract class TicketDatabase extends RoomDatabase{
     public abstract BusDao busDao();
     public abstract PuntoVentaDao puntoVentaDao();
