@@ -137,41 +137,107 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
 
-            if (msg.arg1 == 1) {
-                if(crearEmpleado((String)msg.obj)){
-                    progress.dismiss();
-                    startActivity(new Intent(MainActivity.this, CrearTicket.class));
-                }else{
-                    MainActivity.this.mensaje = "No fue posibe iniciar Session";
-                    showDialog(2);
-                }
+            TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
+            //traerem(db, (String)msg.obj);
 
-            } else {
-                if(isNetDisponible()) {
-                    MainActivity.this.mensaje = (String) msg.obj;
-                    showDialog(msg.arg1);
-                }else{
-                    Boolean existe = traerem(Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build());
-                    String s = "";
-                    if(existe){
+            final Boolean existe[] = {false};
+            String usu = txtUser.getText().toString();
+            String clav = txtPassword.getText().toString();
+            final String mensaje[] = {(String) msg.obj};
+
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... voids) {
+                    if (msg.arg1 == 1) {
+
+                        if (db.empleadoDao().verificarUsuario(usu).size() == 0 || db.empleadoDao().verificarUsuario(usu).size() < 0) {
+
+                            try {
+                                JSONObject datos = null;
+                                datos = new JSONObject(mensaje[0]);
+                                String secondaryHash = datos.getString("secondary_hash");
+                                String cedula = datos.getString("cedula");
+                                String empresa = datos.getString("empresa");
+                                String token = datos.getString("token");
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                String loginInternet = simpleDateFormat.format(Calendar.getInstance().getTime()).toString();
+                                db.empleadoDao().crearEmpleado(new Empleado(txtUser.getText().toString(), secondaryHash, cedula, empresa, token, loginInternet));
+                                existe[0] = true;
+                                String r = "";
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } else if (db.empleadoDao().verificarUsuario(usu).size() > 0) {
+                            for (Empleado item : db.empleadoDao().verificarUsuario(usu)) {
+                                String clave = item.getClave().toString();
+                                String[] split = clave.split(":");
+                                String salt = split[1];
+
+                                String secondaryHash = item.getSecondary_Hash(usu, clav, salt);
+
+                                if (secondaryHash.equals(clave)) {
+                                    JSONObject datos = null;
+                                    try {
+                                        datos = new JSONObject(mensaje[0]);
+                                        String secondary_Hash = datos.getString("secondary_hash");
+                                        String cedula = datos.getString("cedula");
+                                        String empresa = datos.getString("empresa");
+                                        String token = datos.getString("token");
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                        String loginInternet = simpleDateFormat.format(Calendar.getInstance().getTime()).toString();
+                                        db.empleadoDao().actualizarEmpleado(new Empleado(txtUser.getText().toString(), secondary_Hash, cedula, empresa, token, loginInternet));
+                                        existe[0] = true;
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+
+                        if (db.empleadoDao().verificarUsuario(usu).size() > 0) {
+
+                            for (Empleado item : db.empleadoDao().verificarUsuario(usu)) {
+                                String clave = item.getClave().toString();
+                                String[] split = clave.split(":");
+                                String salt = split[1];
+
+                                String secondaryHash = item.getSecondary_Hash(usu, clav, salt);
+                                String f = "";
+
+                                if (secondaryHash.equals(clave)) {
+                                    existe[0] = true;
+                                }
+                            }
+                        }
+                    }
+                    if(existe[0]) {
+                        String y = "";
                         progress.dismiss();
                         startActivity(new Intent(MainActivity.this, CrearTicket.class));
                     }
-                    else{
-                        MainActivity.this.mensaje = "No fue posibe iniciar Session";
-                        showDialog(2);
-                    }
-                }
 
-            }
+                    return null;
+                }
+            }.execute();
+
+            /*if(!existe[0]){
+                txtUser.setText("");
+                txtPassword.setText("");
+                MainActivity.this.mensaje = "No fue posibe iniciar Session";
+                showDialog(2);
+            }*/
+
             if(progress.isShowing()){
                 progress.dismiss();
             }
 
+
         }
+
     };
 
-    public boolean traerem(TicketDatabase db){
+    public boolean traerem(TicketDatabase db, String data){
         final boolean[] existe = {false};
         new AsyncTask<Void, Void, String>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -192,9 +258,31 @@ public class MainActivity extends AppCompatActivity {
 
                         if (secondaryHash.equals(clave)) {
                             existe[0] = true;
-                            break;
+                            String a = "";
                         }
                     }
+                }
+                else{
+                    Executor exec=null;
+                    try {
+                        JSONObject datos = null;
+                        datos = new JSONObject(data);
+                        String secondaryHash = datos.getString("secondary_hash");
+                        String cedula = datos.getString("cedula");
+                        String empresa = datos.getString("empresa");
+                        String token = datos.getString("token");
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        String loginInternet = simpleDateFormat.format(Calendar.getInstance().getTime()).toString();
+                        exec = Executors.newSingleThreadExecutor();
+                        //exec.execute(() -> {
+                        db.empleadoDao().crearEmpleado(new Empleado(txtUser.getText().toString(),secondaryHash,cedula,empresa,token, loginInternet));
+                        existe[0] = true;
+                        String r = "";
+                        //});
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
 
                 return null;
@@ -207,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
     private Boolean crearEmpleado(String data){
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
         Executor exec=null;
-        final boolean[] entro = {false};
+        final Boolean entro[] = {false};
         try {
                 JSONObject datos = new JSONObject(data);
                 String secondaryHash = datos.getString("secondary_hash");

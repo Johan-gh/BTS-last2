@@ -47,7 +47,7 @@ public class MyJobService extends JobService {
                     TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
                     ticketRepository = new TicketRepository();
                     ticketRepository.restTiquete(db);
-                    Toast.makeText(getApplicationContext(), "Sincronizando tiquetes " + s, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Sincronizando tiquetes " + s, Toast.LENGTH_LONG).show();
                 }
                 jobFinished(job,false);
             }
