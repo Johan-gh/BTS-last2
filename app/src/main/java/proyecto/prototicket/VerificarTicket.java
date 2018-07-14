@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class VerificarTicket extends AppCompatActivity implements View.OnClickListener{
 
-    private Button scaner;
+    private ImageButton scaner;
 
     private static final int CAMERA_CODE = 1888;
 
@@ -33,10 +34,7 @@ public class VerificarTicket extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verificar_ticket);
-
-
-
-        scaner = (Button) findViewById(R.id.btnScanQR);
+        scaner = (ImageButton) findViewById(R.id.btnScanQR);
         scaner.setOnClickListener(this);
 
     }
@@ -63,6 +61,9 @@ public class VerificarTicket extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View view) {
         //comprobar version de android
+        scan();
+    }
+    public void  scan(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
 
             if(checkPermission(Manifest.permission.CAMERA)) {
@@ -92,7 +93,6 @@ public class VerificarTicket extends AppCompatActivity implements View.OnClickLi
             olderVersion();
         }
     }
-
     private void olderVersion(){
         if(checkPermission(Manifest.permission.CAMERA)){
             IntentIntegrator integrator = new IntentIntegrator(this);
@@ -150,20 +150,35 @@ public class VerificarTicket extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.item3:
-                Intent intent = new Intent(this, Configuracion.class);
-                startActivity(intent);
-                break;
-            case R.id.item1:
-                Intent intent1 = new Intent(this, CrearTicket.class);
+        switch (item.getItemId()) {
+            case R.id.it_ticket:
+                Intent i_crear_ticket = new Intent(this, CrearTicket.class);
+                startActivity(i_crear_ticket);
+                return true;
+            case R.id.it_bus:
+                Intent i_despachar_bus = new Intent(this, DepacharBus.class);
+                startActivity(i_despachar_bus);
+                return true;
+            /*case R.id.it_verificar_ticket:
+                Intent intent1 = new Intent(this, VerificarTicket.class);
                 startActivity(intent1);
-                break;
-            case R.id.item4:
+                return true;*/
+                 /*case R.id.it_cierre:
+                Intent i_cierre =new Intent(this,C)*/
+            case R.id.it_itinerario:
                 Intent intent2 = new Intent(this, Pre_Itinerario.class);
                 startActivity(intent2);
-                break;
+                return true;
+
+            case R.id.it_bluetooth:
+                Intent intent3 =new Intent(this, BluetoothActivity.class);
+                startActivity(intent3);
+                return true;
+            case R.id.it_ajustes:
+                Intent i_ajustes =new Intent(this,Configuracion.class);
+                startActivity(i_ajustes);
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }

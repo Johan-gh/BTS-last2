@@ -5,232 +5,261 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-<LinearLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_crear_ticket"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    tools:context="proyecto.prototicket.CrearTicket">
-
-
-    <TextView
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_crear_ticket"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/createTicket"
-        android:textStyle="bold"
-        android:textSize="18dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="proyecto.prototicket.CrearTicket">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/date"/>
-
-        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date"
-            android:focusable="false"
-            android:clickable="true"
-            android:id="@+id/txtDate"
-            android:text=""
-            />
+            android:gravity="center"
+            android:text="@string/createTicket"
+            android:textColor="@android:color/black"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/travelRoute"/>
-
-        <AutoCompleteTextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:id="@+id/txtTravelRoute"
-            android:hint="Origen destino"
-            android:text="" ></AutoCompleteTextView>
+            android:layout_height="wrap_content"></LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/vehicle"/>
-
-        <AutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="Inserte la placa"
-            android:id="@+id/txtVehicle"></AutoCompleteTextView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Precio"/>
-
-        <EditText
-            android:id="@+id/txtPrecio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="precio"
-            android:inputType="numberDecimal"
-            android:text=""></EditText>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/posting"/>
-
-        <AutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="punto de venta"
-            android:id="@+id/txtPosting"></AutoCompleteTextView>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/traveler"/>
-
-        <EditText
-            android:id="@+id/txtTraveler"
-            android:layout_width="225dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="" />
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageButton
-                android:id="@+id/btnCodigoCedula"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/txtDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
+                android:clickable="true"
+                android:focusable="false"
+                android:inputType="date"
+                android:text="" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/travelRoute"
+                android:textColor="@android:color/black" />
+
+            <AutoCompleteTextView
+                android:id="@+id/txtTravelRoute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Origen destino"
+                android:inputType="textPersonName"
+                android:text=""></AutoCompleteTextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vehicle"
+                android:textColor="@android:color/black" />
+
+            <AutoCompleteTextView
+                android:id="@+id/txtVehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ingrese la placa"
+                android:inputType="textPersonName"></AutoCompleteTextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/txtPrecio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Precio"
+                android:inputType="numberDecimal"
+                android:text=""></EditText>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/posting"
+                android:textColor="@android:color/black" />
+
+            <AutoCompleteTextView
+                android:id="@+id/txtPosting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Punto de venta"
+                android:inputType="textPersonName"></AutoCompleteTextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="5dp"
+            android:background="@color/colorAccent">
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/traveler"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/txtTraveler"
+                android:layout_width="225dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/btnCodigoCedula"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_barcode_scan" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cedula"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/txtCedula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/txtTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
+                android:inputType="time"
+                android:text="" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:visibility="invisible">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/RH" />
+
+            <EditText
+
+                android:id="@+id/txtRH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+
+            <!--<Button
+                android:id="@+id/btnSave"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"android:layout_centerHorizontal="true"
+
+
+                android:text="Imprimir" />-->
+            <ImageButton
+                android:id="@+id/btnsave"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
                 android:background="@android:color/transparent"
-                android:src="@android:drawable/ic_menu_camera" />
-
-        </RelativeLayout>
+                android:src="@drawable/ic_print" />
 
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cedula"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text=""
-            android:id="@+id/txtCedula"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/RH"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text=""
-            android:id="@+id/txtRH"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/time"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="time"
-            android:focusable="false"
-            android:clickable="true"
-            android:text=""
-            android:id="@+id/txtTime" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnSave"
-            android:layout_centerHorizontal="true"
-            android:text="Imprimir"
-            />
+        </LinearLayout>
 
 
     </LinearLayout>
-
-
-</LinearLayout>
 
 </ScrollView>

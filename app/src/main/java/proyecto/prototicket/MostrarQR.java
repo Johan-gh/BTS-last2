@@ -67,24 +67,35 @@ public class MostrarQR extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.item3:
-                Intent intent = new Intent(this, Configuracion.class);
-                startActivity(intent);
-                break;
-            case R.id.item1:
-                Intent intent1 = new Intent(this, CrearTicket.class);
+        switch (item.getItemId()) {
+            case R.id.it_ticket:
+                Intent i_crear_ticket = new Intent(this, CrearTicket.class);
+                startActivity(i_crear_ticket);
+            case R.id.it_bus:
+                Intent i_despachar_bus = new Intent(this, DepacharBus.class);
+                startActivity(i_despachar_bus);
+                return true;
+            /*case R.id.it_verificar_ticket:
+                Intent intent1 = new Intent(this, VerificarTicket.class);
                 startActivity(intent1);
-                break;
-            case R.id.item2:
-                Intent intent2 = new Intent(this, VerificarTicket.class);
+                return true;*/
+                 /*case R.id.it_cierre:
+                Intent i_cierre =new Intent(this,C)*/
+            case R.id.it_itinerario:
+                Intent intent2 = new Intent(this, Pre_Itinerario.class);
                 startActivity(intent2);
-                break;
-            case R.id.item4:
-                Intent intent3 = new Intent(this, Pre_Itinerario.class);
+                return true;
+
+            case R.id.it_bluetooth:
+                Intent intent3 =new Intent(this, BluetoothActivity.class);
                 startActivity(intent3);
-                break;
+                return true;
+            case R.id.it_ajustes:
+                Intent i_ajustes =new Intent(this,Configuracion.class);
+                startActivity(i_ajustes);
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
     }
 }

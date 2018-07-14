@@ -26,10 +26,10 @@ public interface BusDao {
     @Query("SELECT placa FROM tabla_bus WHERE numero_bus = :numeroBus")
     public LiveData<List<Bus>> verPlacaPorNumero(String numeroBus);
 
-
     @Query("SELECT placa FROM tabla_bus WHERE id =:numeroBus")
     public List<Bus> verPlaca(String numeroBus);
 
     @Query("SELECT tipo_servicio, empresaId FROM tabla_bus WHERE placa = :placa")
     public List<Bus> verificarServicio(String placa);
-}
+
+    }

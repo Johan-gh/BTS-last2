@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
+
+import proyecto.prototicket.CrearTicket;
 
 
 public class BluetoothUtils {
@@ -74,6 +77,8 @@ public class BluetoothUtils {
                     // we got this name from the list of paired devices
                     if (device.getName().equals("printQln")) {
                         mmDevice = device;
+                        CrearTicket ct =new CrearTicket();
+                        Toast.makeText(ct.getApplicationContext(),"Conectado con impresora zebra",Toast.LENGTH_LONG);
                         break;
                     }
                 }

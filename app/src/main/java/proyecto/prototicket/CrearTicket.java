@@ -1,8 +1,10 @@
 package proyecto.prototicket;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
@@ -23,6 +25,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,6 +67,11 @@ import proyecto.prototicket.schemas.Ruta.Ruta;
 import proyecto.prototicket.schemas.Ticket.TicketDb;
 import proyecto.prototicket.schemas.Ticket.TicketRepository;
 import proyecto.prototicket.schemas.TicketDatabase;
+import proyecto.prototicket.services.BusClient;
+import proyecto.prototicket.services.ServiceBuilder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static proyecto.prototicket.Utils.ClassCompression.encode;
 
@@ -89,12 +97,13 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
     private  EditText txtPrecio;
 
-    private ImageButton btnCodigoCedula;
-    private Button btnSave;
+    private ImageButton btnCodigoCedula,btnsave;
+    //private Button btnSave;
     boolean busExiste;
     private UUID uuid ;
     private int dia, mes, anio, hora, minutos;
 
+    private String respuesta="";
 
     private static final int CAMERA_CODE = 1888;
     BluetoothUtils bT;
@@ -102,11 +111,10 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_ticket);
 
-
+        ProgressDialog pd =new ProgressDialog(CrearTicket.this);
         txtOrigenDestino = (AutoCompleteTextView) findViewById(R.id.txtTravelRoute);
         txtFecha = (EditText) findViewById(R.id.txtDate);
         txtHora = (EditText) findViewById(R.id.txtTime);
@@ -116,6 +124,8 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         txtPuntoVenta = (AutoCompleteTextView) findViewById(R.id.txtPosting);
         txtVehicle = (AutoCompleteTextView) findViewById(R.id.txtVehicle);
         txtPrecio = (EditText) findViewById(R.id.txtPrecio);
+        btnsave = (ImageButton) findViewById(R.id.btnsave);
+
 
 
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
@@ -153,11 +163,11 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         txtPrecio.setOnTouchListener(this);
 
 
-        btnSave = (Button) findViewById(R.id.btnSave);
+        //btnSave = (ImageButton) findViewById(R.id.btnsave2);
 
 
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        btnsave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(txtVehicle.getText().toString().equals("") ||
                         txtFecha.getText().toString().equals("") ||
@@ -169,14 +179,21 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                         txtCedula.getText().toString().equals("") ||
                         txtHora.getText().toString().equals(""))
                 {
-
-                    fastToast("Por favor ingrese todos los datos solicitados");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(CrearTicket.this);
+                    alert.setTitle("Alerta");
+                    alert.setMessage("Por favor ingrese todos los datos solicitados");
+                    alert.setPositiveButton("Aceptar",null);
+                    alert.create();
+                    alert.show();
+                    //fastToast("Por favor ingrese todos los datos solicitados");
                 }
                 else{
                     try {
 
+
                         saveData(db);
                     } catch (Exception ex) {
+
                         ex.printStackTrace();
                     }
 
@@ -230,7 +247,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                     android.R.layout.simple_list_item_1,strinList);
             txt.setAdapter(adapter);
             txt.setThreshold(1);
-            
+
 
         });
     }
@@ -283,18 +300,16 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                 String destino = ruta.getDestino().toString();
                 String id = ruta.getId();
                 String precio = ruta.getPrecio_E();
-                String habilitada = ruta.getHabilitada();
+                String estado = ruta.getEstado();
                 rutaId.put(origen + '-' + destino, id + '-' + precio);
-                if (habilitada.equals("true")){
+                if (estado.equals("Habilitada")){
                     rutasList.add(origen + '-' + destino);
                 }
-
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_list_item_1,rutasList);
             txt.setAdapter(adapter);
             txt.setThreshold(1);
-
         });
     }
 
@@ -384,20 +399,39 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.item3:
-                Intent intent = new Intent(this, Configuracion.class);
-                startActivity(intent);
-                break;
-            case R.id.item2:
+            /*case R.id.it_ticket:
+                Intent i_crear_ticket = new Intent(this, CrearTicket.class);
+                startActivity(i_crear_ticket);*/
+            case R.id.it_bus:
+                Intent i_despachar_bus = new Intent(this, DepacharBus.class);
+                startActivity(i_despachar_bus);
+                return true;
+            case R.id.it_verificar_ticket:
+                /*VerificarTicket vt=new VerificarTicket();
+                vt.scan();*/
                 Intent intent1 = new Intent(this, VerificarTicket.class);
                 startActivity(intent1);
-                break;
-            case R.id.item4:
+                return true;
+            /*case R.id.it_cierre:
+                Configuracion c= new Configuracion();
+                c.cierre();
+                return true;*/
+            case R.id.it_itinerario:
                 Intent intent2 = new Intent(this, Pre_Itinerario.class);
                 startActivity(intent2);
-                break;
+                return true;
+
+            case R.id.it_bluetooth:
+                Intent intent3 =new Intent(this, BluetoothActivity.class);
+                startActivity(intent3);
+                return true;
+            case R.id.it_ajustes:
+                Intent i_ajustes =new Intent(this,Configuracion.class);
+                startActivity(i_ajustes);
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
     }
 
     @Override
@@ -405,6 +439,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
+                Toast.makeText(this, "No se leyó nada", Toast.LENGTH_SHORT).show();
                 fastToast(getString(R.string.ERROR_LECTURA_CEDULA));
             } else {
                 String reading = null;
@@ -690,6 +725,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
 
     private void fastToast(String message){
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
         toast.show();
     }
 
@@ -732,7 +768,7 @@ public class CrearTicket extends AppCompatActivity implements View.OnClickListen
                                 String destino = split[1];
                                 String empresaId = it.getEmpresaId().toString();
                                 String servicio = it.getTipo_servicio().toString();
-                                if (servicio.equals("Especial")) {
+                                if (servicio.equals("VAN")) {
                                     precio_n = db.rutaDao().obtenerPrecioE(origen, destino, empresaId).toString();
                                     precio = precio_n;
                                 } else if (servicio.equals("Normal")) {

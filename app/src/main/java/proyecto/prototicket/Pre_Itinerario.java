@@ -110,21 +110,36 @@ public class Pre_Itinerario extends AppCompatActivity implements LifecycleRegist
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.item1:
-                Intent intent = new Intent(this, CrearTicket.class);
-                startActivity(intent);
-                break;
-            case R.id.item2:
+        switch (item.getItemId()) {
+            case R.id.it_ticket:
+                Intent i_crear_ticket = new Intent(this, CrearTicket.class);
+                startActivity(i_crear_ticket);
+                return true;
+            case R.id.it_bus:
+                Intent i_despachar_bus = new Intent(this, DepacharBus.class);
+                startActivity(i_despachar_bus);
+                return true;
+            case R.id.it_verificar_ticket:
                 Intent intent1 = new Intent(this, VerificarTicket.class);
                 startActivity(intent1);
-                break;
-            case R.id.item3:
-                Intent intent2 = new Intent(this, Configuracion.class);
+                return true;
+                 /*case R.id.it_cierre:
+                Intent i_cierre =new Intent(this,C)*/
+            case R.id.it_itinerario:
+                Intent intent2 = new Intent(this, Pre_Itinerario.class);
                 startActivity(intent2);
-                break;
+                return true;
+
+            case R.id.it_bluetooth:
+                Intent intent3 =new Intent(this, BluetoothActivity.class);
+                startActivity(intent3);
+                return true;
+            case R.id.it_ajustes:
+                Intent i_ajustes =new Intent(this,Configuracion.class);
+                startActivity(i_ajustes);
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void autoCompletarEmpresa(TicketDatabase db, AutoCompleteTextView txt){

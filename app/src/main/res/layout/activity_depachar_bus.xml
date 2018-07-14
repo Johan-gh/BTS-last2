@@ -9,12 +9,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColor="@android:color/black"
             android:gravity="center"
             android:text="@string/despacharBus"
             android:textStyle="bold"
@@ -22,87 +24,119 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="placa de bus"/>
+                android:textSize="16dp"
+                android:textColor="@android:color/black"
+                android:text="Placa de bus"/>
 
             <AutoCompleteTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtplaca"/>
         </LinearLayout>
-
         <LinearLayout
+            android:id="@+id/layout_pasajeros"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Número de pasajeros"/>
+                android:layout_gravity="left"
+                android:orientation="vertical">
 
-            <EditText
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Número de pasajeros"
+                    android:textColor="@android:color/black"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/txtNumPasajeros"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:layout_margin="10dp"
+                    android:inputType="number" />
+
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:id="@+id/txtNumPasajeros"/>
+                android:layout_height="match_parent"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+
+                    android:layout_gravity="right"
+                    >
+                    <ImageButton
+                        android:id="@+id/incrementar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:onClick="countUp"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_plus" />
+
+
+
+                    <ImageButton
+                        android:id="@+id/decrementar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:onClick="countDown"
+                        android:layout_margin="5dp"
+                        android:src="@drawable/ic_minus" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
+
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/countUp_btn"
-                android:layout_width="match_parent"
-                android:layout_height="82dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="center_horizontal"
-                android:onClick="countUp"
-                android:text="+"
-                android:textColor="@android:color/holo_green_light"
-                android:textSize="50dp"
-                app:layout_constraintBottom_toTopOf="@+id/countDown_btn"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/countDown_btn"
-                android:layout_width="match_parent"
-                android:layout_height="82dp"
-                android:gravity="center_horizontal"
-                android:onClick="countDown"
-                android:text="-"
-                android:textColor="@color/zxing_viewfinder_laser"
-                android:textSize="50dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.863"
-                app:layout_constraintStart_toStartOf="parent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageButton
                 android:id="@+id/btnImprimir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center"
                 android:onClick="click_imprimir"
-                android:text="Imprimir"/>
+                android:src="@drawable/ic_print"/>
+            <!--<Button
+                android:id="@+id/btnImprimir2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click_imprimir"
+                android:text="Imprimir" />-->
         </LinearLayout>
 
     </LinearLayout>
+
+
+
+
+
+
 
 </android.support.constraint.ConstraintLayout>

@@ -18,7 +18,7 @@ public interface RutaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void crearRuta(Ruta ruta);
 
-    @Query("SELECT  id, origen , destino, precio_N,precio_E,habilitada FROM tabla_ruta")
+    @Query("SELECT  id, origen , destino, precio_N,precio_E,estado FROM tabla_ruta")
     public LiveData<List<Ruta>> verRutaOrigenDestino();
 
     @Query("SELECT origen,destino FROM tabla_ruta WHERE origen = :origen and destino = :destino")

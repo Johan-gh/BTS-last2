@@ -1,6 +1,7 @@
 package proyecto.prototicket;
 
 import android.arch.persistence.room.Room;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -73,20 +74,35 @@ public class Configuracion extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.item1:
-                Intent intent = new Intent(this, CrearTicket.class);
+            case R.id.it_ticket:
+                Intent i_crear_ticket = new Intent(this, CrearTicket.class);
+                startActivity(i_crear_ticket);
+                return true;
+           /* case R.id.it_despachar_bus:
+                Intent i_despachar_bus = new Intent(this, VerificarTicket.class);
                 startActivity(intent);
-                break;
-            case R.id.item2:
+                return true;*/
+            case R.id.it_verificar_ticket:
                 Intent intent1 = new Intent(this, VerificarTicket.class);
                 startActivity(intent1);
-                break;
-            case R.id.item4:
+                return true;
+                 /*case R.id.it_cierre:
+                Intent i_cierre =new Intent(this,C)*/
+            case R.id.it_itinerario:
                 Intent intent2 = new Intent(this, Pre_Itinerario.class);
                 startActivity(intent2);
-                break;
+                return true;
+
+            case R.id.it_bluetooth:
+                Intent intent3 =new Intent(this, BluetoothActivity.class);
+                startActivity(intent3);
+                return true;
+            /*case R.id.it_ajustes:
+                Intent i_ajustes =new Intent(this,Configuracion.class);
+                startActivity(i_ajustes);*/
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     public void click_sincronizar(View view) {
@@ -96,6 +112,7 @@ public class Configuracion extends AppCompatActivity {
             rr = new RutaRepository();
             ir = new ItinerarioRepository();
             er = new EmpresaRepository();
+
 
             TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
             br.getBuses(URL_BUS, db);
@@ -121,6 +138,11 @@ public class Configuracion extends AppCompatActivity {
     }
 
     public void click_cierre(View view) {
+        TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
+        ticketRepository = new TicketRepository();
+        restCierre(db);
+    }
+    public void cierre(){
         TicketDatabase db = Room.databaseBuilder(getApplicationContext(), TicketDatabase.class, getString(R.string.DB_NAME)).build();
         ticketRepository = new TicketRepository();
         restCierre(db);

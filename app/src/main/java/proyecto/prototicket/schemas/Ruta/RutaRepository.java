@@ -62,7 +62,7 @@ public class RutaRepository {
 
                 exec = Executors.newSingleThreadExecutor();
                 exec.execute(() -> {
-                    db.rutaDao().crearRuta(new Ruta(jsonObject.optString("id"),jsonObject.optString("origen"),jsonObject.optString("destino"),jsonObject.optString("precio_N"),jsonObject.optString("precio_E"),jsonObject.optString("habilitada"), jsonObject.optString("empresa")));
+                    db.rutaDao().crearRuta(new Ruta(jsonObject.optString("id"),jsonObject.optString("origen"),jsonObject.optString("destino"),jsonObject.optString("precio_N"),jsonObject.optString("precio_E"),jsonObject.optString("estado"), jsonObject.optString("empresa")));
                 });
             }
         }catch (MalformedURLException e){

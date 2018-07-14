@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
     BluetoothUtils bT;
     AutoCompleteTextView txtplacas;
     EditText txtpasajeros;
+    ImageButton btn_plus,btn_minus;
     HashMap<String, String> rutaList = new HashMap<String, String>();
     HashMap<String, String> contador = new HashMap<String, String>();
     List<String> listaRutas = new ArrayList<>();
@@ -65,29 +68,58 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.item1:
-                Intent intent = new Intent(this, CrearTicket.class);
-                startActivity(intent);
-                break;
-            case R.id.item2:
+        switch (item.getItemId()) {
+            case R.id.it_ticket:
+                Intent i_crear_ticket = new Intent(this, CrearTicket.class);
+                startActivity(i_crear_ticket);
+           /* case R.id.it_bus:
+                Intent i_despachar_bus = new Intent(this, DepacharBus.class);
+                startActivity(i_despachar_bus);*/
+                return true;
+            case R.id.it_verificar_ticket:
                 Intent intent1 = new Intent(this, VerificarTicket.class);
                 startActivity(intent1);
-                break;
-            case R.id.item4:
+                return true;
+                 /*case R.id.it_cierre:
+                     Configuracion c= new Configuracion();
+                     c.cierre();
+                     return true;*/
+            case R.id.it_itinerario:
                 Intent intent2 = new Intent(this, Pre_Itinerario.class);
                 startActivity(intent2);
-                break;
-            case R.id.item3:
-                Intent intent4 = new Intent(this, Configuracion.class);
-                startActivity(intent4);
-                break;
+                return true;
+
+            case R.id.it_bluetooth:
+                Intent intent3 =new Intent(this, BluetoothActivity.class);
+                startActivity(intent3);
+                return true;
+            case R.id.it_ajustes:
+                Intent i_ajustes =new Intent(this,Configuracion.class);
+                startActivity(i_ajustes);
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void autocompletarPlacas(TicketDatabase db, AutoCompleteTextView txt){
+        /*db.busDao().verPlacas().observe( this, (List<String> strinList) -> {
+            // TODO Considerar lo siguiente y ojala modificar para eliminar
+            *//*
+            Esto se puede dejar asi y no hay problema, sin embargo, hay un tema de arquitectura, en
+            vez de usar esto directamente debemos considerar crear un repositorio para la informacion y todo eso
+            ver https://developer.android.com/topic/libraries/architecture/guide.html
 
+            Lo hice asi de forma rapida y el patron puede reproducirse para otras cosas, sin embargo a
+            mediano plazo consideraremos el repossitorio con inyeccion de dependencia sy dagger...
+             *//*
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1,strinList);
+            txt.setAdapter(adapter);
+            txt.setThreshold(1);
+
+
+        });*/
+        //no despachados
         db.ticketDao().obtenerPlacasBuses("false").observe( this, (List<TicketDb> strinList) ->{
             List<String> placasList = new ArrayList<String>();
 
@@ -95,6 +127,9 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
                 String placa = item.getPlacaBus();
                 if(placasList.indexOf(placa) < 0) {
                     placasList.add(placa);
+                }
+                if (placasList.size()==0){
+                    fastToast("No se han despachado buses aún");
                 }
 
             }
@@ -104,7 +139,6 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
             txt.setAdapter(adapter);
             txt.setThreshold(1);
         });
-
     }
 
     public void click_imprimir(View view) {
@@ -121,6 +155,7 @@ public class DepacharBus extends AppCompatActivity implements LifecycleRegistryO
 
     private void fastToast(String message){
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER,0,0);
         toast.show();
     }
 

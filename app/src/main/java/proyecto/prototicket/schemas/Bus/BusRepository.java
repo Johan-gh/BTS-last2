@@ -1,13 +1,6 @@
 package proyecto.prototicket.schemas.Bus;
 
-import android.arch.lifecycle.LifecycleActivity;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.persistence.room.Room;
-import android.content.Context;
 import android.os.StrictMode;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,18 +11,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import proyecto.prototicket.CrearTicket;
+import proyecto.prototicket.schemas.Bus.Bus;
 import proyecto.prototicket.schemas.TicketDatabase;
-
-/**
- * Created by User on 11/20/2017.
- */
 
 public class BusRepository {
 

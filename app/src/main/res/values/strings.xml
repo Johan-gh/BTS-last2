@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">Prototicket</string>
+    <string name="app_name">BTS</string>
     <string name="login">Iniciar sesión</string>
     <string name="createTicket">Crear Tiquete</string>
     <string name="dateBuy">Fecha Compra</string>
     <string name="date">Fecha Viaje</string>
-    <string name="travelRoute">Origen-Destino</string>
+    <string name="travelRoute">Origen - Destino</string>
     <string name="posting">Punto de venta</string>
-    <string name="vehicle">Vehiculo</string>
+    <string name="vehicle">Vehículo</string>
     <string name="traveler">Pasajero</string>
     <string name="cedula">Cédula</string>
     <string name="RH">G.S.RH</string>
@@ -18,6 +18,7 @@
     <string name="INFO__TIQUETE_CREADO_EXITOSAMENTE">Tiquete creado correctamente</string>
     <string name="ERROR_LECTURA_CEDULA">Error en la lectura del código de la cédula</string>
     <string name="DB_NAME">main_db</string>
+
 
     <string name="itinerario">Itinerario</string>
 

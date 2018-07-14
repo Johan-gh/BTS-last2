@@ -1,28 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    <item android:id="@+id/item1"
-          android:title="Crear"
-          android:orderInCategory="100"
-          android:icon="@drawable/ic_action_name"
-          app:showAsAction="ifRoom"/>
+        >
+        <item
+            android:id="@+id/it_ticket"
+            android:icon="@drawable/ic_ticket"
+            android:orderInCategory="101"
+            android:title="Crear ticket"
 
-    <item android:id="@+id/item2"
-        android:title="Verificar"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_action_verificar"
-        app:showAsAction="ifRoom"/>
+            app:showAsAction="always" />
 
-    <item android:id="@+id/item3"
-        android:title="Ajustes"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_action_ajustes"
-        app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/it_bus"
+            android:icon="@drawable/ic_bus"
+            android:orderInCategory="101"
+            android:title="Despachar bus"
+            app:showAsAction="always" />
 
-    <item android:id="@+id/item4"
-        android:title="Ver itinerario"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_assignment_black_24dp"
-        app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/it_verificar_ticket"
+            android:icon="@drawable/ic_qr"
+            android:orderInCategory="101"
+            android:title="Verificar ticket"
+            app:showAsAction="always" />
+
+        <item
+            android:id="@+id/it_cierre"
+            android:icon="@drawable/ic_terminar_turno"
+            android:orderInCategory="101"
+            android:title="Terminar turno"
+            app:showAsAction="always" />
+        <item
+            android:id="@+id/it_itinerario"
+            android:title="Itinerario"
+            android:orderInCategory="100"
+            android:icon="@drawable/ic_assignment_black_24dp"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/it_bluetooth"
+            android:title="Bluetooth"
+            android:orderInCategory="100"
+            android:icon="@android:drawable/stat_sys_data_bluetooth"
+            app:showAsAction="never" />
+
+        <item android:id="@+id/it_ajustes"
+            android:title="Ajustes"
+            android:orderInCategory="100"
+            android:icon="@drawable/ic_action_ajustes"
+            app:showAsAction="never"/>
+
+
 </menu>

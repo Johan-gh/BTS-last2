@@ -16,15 +16,20 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/checkTicket"
+        android:textColor="@android:color/black"
         android:textStyle="bold"
-        android:textSize="18dp"/>
+        android:textSize="18dp"
+        android:id="@+id/textView2" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@+id/btnScanQR"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:id="@+id/btnScanQR"
-        android:text="@string/scanQR"/>
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_qr2"/>
+
 
 </RelativeLayout>

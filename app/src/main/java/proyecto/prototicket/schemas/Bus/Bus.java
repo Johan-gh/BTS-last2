@@ -80,6 +80,4 @@ public class Bus {
     public void setTipo_servicio(String tipo_servicio) {
         this.tipo_servicio = tipo_servicio;
     }
-
-
 }

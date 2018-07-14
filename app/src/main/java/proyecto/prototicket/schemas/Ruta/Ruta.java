@@ -16,17 +16,16 @@ public class Ruta {
     private String destino;
     private String precio_N;
     private String precio_E;
-    private String habilitada;
+    private String estado;
     private String empresaId;
 
-    public Ruta(String id, String origen, String destino, String precio_N, String precio_E, String habilitada, String empresaId) {
+    public Ruta(String id, String origen, String destino, String precio_N, String precio_E, String estado, String empresaId) {
         this.id = id;
         this.origen = origen;
         this.destino = destino;
         this.precio_N = precio_N;
         this.precio_E = precio_E;
-        this.habilitada = habilitada;
-        this.empresaId = empresaId;
+        this.estado = estado;
     }
 
     public String getEmpresaId() {
@@ -77,11 +76,11 @@ public class Ruta {
         this.precio_E = precio_E;
     }
 
-    public String getHabilitada() {
-        return habilitada;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setHabilitada(String habilitada) {
-        this.habilitada = habilitada;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
